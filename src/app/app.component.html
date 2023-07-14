@@ -15,12 +15,16 @@
     [ngClass]="{'container-selected': b.selected}">
 
     <ng-container *ngIf="b.id == 0">
-      {{b.menuBtnText}}
+      <app-primary></app-primary>
     </ng-container>
 
-    <ng-container *ngIf="b.id == 1">{{b.menuBtnText}}</ng-container>
+    <ng-container *ngIf="b.id == 1">
+      <app-converter></app-converter>
+    </ng-container>
 
-    <ng-container *ngIf="b.id == 2">{{b.menuBtnText}}</ng-container>
+    <ng-container *ngIf="b.id == 2">
+      <app-info></app-info>
+    </ng-container>
       
   </div>
 </div>
