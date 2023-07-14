@@ -1,1 +1,25 @@
-/* You can add global styles to this file, and also import other style files */
+
+body {
+  display: flex;
+  min-width: 320px;
+  background: #111;
+  color: #aaa;
+  font-family: 'Open Sans', sans-serif;
+  cursor: default;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  font-weight: 400;
+}
+
+@keyframes fadeIn {
+  0% {opacity: 0;}
+  100% {opacity: 1;}
+}
+
+@keyframes fadeIn2 {
+  0% {opacity: 0;}
+  100% {opacity: 1;}
+}

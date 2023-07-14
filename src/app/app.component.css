@@ -1,0 +1,73 @@
+
+:host {
+  flex-wrap: wrap;
+  flex-basis: 100%;
+  min-height: calc(100vh + 60px);
+}
+
+
+/*   Top Level Layout   */
+
+.header {
+  display: flex;
+  flex-basis: 100%;
+  align-items: center;
+  justify-content: center;
+  height: 70px;
+  background: #282828;
+  font-size: 26px;
+}
+
+.main-wrapper {
+  display: flex;
+  flex-basis: 100%;
+  flex-wrap: wrap;
+  height: calc(100% - 130px);
+  align-content: flex-start;
+}
+
+.footer {
+  display: flex;
+  flex-basis: 100%;
+  align-self: flex-end;
+  height: 60px;
+  background: #282828;
+}
+
+
+/*   Menu   */
+
+.top-menu {
+  display: flex;
+  flex-basis: 100%;
+  justify-content: center;
+  padding: 5px;
+}
+
+.top-menu-option {
+  display: inline-flex;
+  margin: 0 10px;
+  padding: 20px;
+  background: #181818;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.top-menu-option.option-selected {
+  background: #222;
+  pointer-events: none;
+}
+
+
+/*   Containers   */
+
+.top-container {
+  display: none;
+  flex-basis: 100%;
+  background: #002200;
+}
+
+.top-container.container-selected {
+  display: flex;
+}
+
