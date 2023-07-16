@@ -1,35 +1,52 @@
 
+<!-- Color Output -->
 <div class="output-container">
-  <div class="text-output">
-    <div
-      *ngFor="let b of textOutputBlocks"
-      class="text-output-row">{{b.header}}: {{b.valStr}}</div>
-  </div>
+  <div class="output-container-header">Selected Color</div>
   <div 
     class="color-output"
-    style="background: {{cHex}};"></div>
+    style="background: {{color.hex}};"></div>
+  <div class="text-output">
+    <div
+      *ngFor="let row of textOutput"
+      class="text-output-row">
+      <div class="text-output-row-header">{{row.header}}</div>
+      <div class="text-output-row-body">
+        <div 
+          *ngFor="let notation of row.notations"
+          class="text-output-notation">
+          <div class="text-output-notation-name">{{notation.name}}</div>
+          <div class="text-output-notation-values">
+            <ng-container *ngFor="let value of notation.values; index as v">
+              <span 
+                class="text-output-value"
+                [ngClass]="{
+                  'text-output-value-short': value.length < 4,
+                  'text-output-value-hex': notation.values[0] == '#'
+                }">{{value}}</span>
+              <span *ngIf="v + 1 != notation.values.length && notation.values[0] != '#'">,</span>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
+<!-- Instructions -->
+<div class="instruction-container">
+  <div class="instruction-text">Move any slider for any of the three color spaces below. The output above shows how it modifies the color.<br/>Sliders for the other two color spaces adjust automatically to reflect the change.</div>
+</div>
+
+<!-- Range Inputs -->
 <div class="range-inputs-container">
-  <div class="range-inputs-block">
+  <div 
+    *ngFor="let block of inputBlocks"
+    class="range-inputs-block">
+    <div class="range-inputs-block-header">{{block.name}}</div>
     <app-range-input
-      *ngFor="let i of ranges.rgb; index as j"
-      [min]="i.min" [max]="i.max" [value]="rgbArr[j]" [step]="1"
-      (output)="setColorFromRGB($event, i.id)">
-    </app-range-input>
-  </div>
-  <div class="range-inputs-block">
-    <app-range-input
-      *ngFor="let i of ranges.hsl; index as j"
-      [min]="i.min" [max]="i.max" [value]="hslArr[j]" [step]="1"
-      (output)="setColorFromHSL($event, i.id)">
-    </app-range-input>
-  </div>
-  <div class="range-inputs-block">
-    <app-range-input
-      *ngFor="let i of ranges.cmyk; index as j"
-      [min]="i.min" [max]="i.max" [value]="cmykArr[j]" [step]="1"
-      (output)="setColorFromCMYK($event, i.id)">
+      *ngFor="let range of block.ranges"
+      [range]="range"
+      (output)="setColorFromRange($event, range.id)">
     </app-range-input>
   </div>
 </div>

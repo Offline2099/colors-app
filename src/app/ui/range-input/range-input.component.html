@@ -1,8 +1,16 @@
 
+<!-- Header -->
+<div class="input-header">
+  <div class="value-min">{{range.min}}</div>
+  <div class="input-header-text">{{range.header}}&emsp;(&hairsp;{{currentValue}}&hairsp;)</div>
+  <div class="value-max">{{range.max}}</div>
+</div>
+
+<!-- Slider -->
 <input 
   type="range" 
-  min="{{min}}" 
-  max="{{max}}" 
-  value="{{value}}" 
-  step="{{step}}" 
-  (input)="sendChanges($event)">
+  min="{{range.min}}" 
+  max="{{range.max}}" 
+  value="{{range.value}}" 
+  step="{{range.step}}" 
+  (input)="sendChanges($event)"/>

@@ -1,23 +1,29 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, DoCheck, Input, Output, EventEmitter } from '@angular/core';
+
+import { InputRange } from '../../interfaces';
 
 @Component({
   selector: 'app-range-input',
   templateUrl: './range-input.component.html',
   styleUrls: ['./range-input.component.css']
 })
-export class RangeInputComponent implements OnInit {
+export class RangeInputComponent implements OnInit, DoCheck {
 
   constructor() { }
 
-  @Input() min: number = 0;
-  @Input() max: number = 0;
-  @Input() value: number = 0;
-  @Input() step: number = 0;
-  @Input() leap?: number = 0;
+  @Input() range: InputRange = {
+    id: '', header: '', min: 0, max: 0, value: 0, step: 0
+  }
 
   @Output() output = new EventEmitter<number>();
 
+  currentValue: string = '';
+
   ngOnInit(): void {
+  }
+
+  ngDoCheck(): void {
+    this.currentValue = this.range.value.toFixed(0);
   }
 
   sendChanges(e: Event): void {

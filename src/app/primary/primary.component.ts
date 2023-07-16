@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Color, ColorRGB, ColorHSL, ColorCMYK, RangeList } from '../interfaces';
+import { 
+  TextOutputBlock, InputRange,
+  Color, ColorRGB, ColorHSL, ColorCMYK, ColorRangeList } from '../interfaces';
 import { ColorService } from '../color.service';
 
 @Component({
@@ -14,50 +16,104 @@ export class PrimaryComponent implements OnInit {
 
   color: Color = this.c.getColor();
 
-  textOutputBlocks = [
-    {header: 'RGB', valStr: ''}, 
-    {header: 'HSL', valStr: ''}, 
-    {header: 'CMYK', valStr: ''},
-    {header: 'Hex', valStr: ''}
-  ];
-  cHex: string = '#000000';
+  textOutput: TextOutputBlock[] = [];
 
-  ranges: RangeList = this.c.getRanges();
-  rgbArr: number[] = [];
-  hslArr: number[] = [];
-  cmykArr: number[] = [];
+  ranges: ColorRangeList = this.c.getRanges();
+  inputBlocks: {name: string, ranges: InputRange[]}[] = [];
 
   ngOnInit(): void {
-    this.updateOutput();
+    this.constructTextOutputBlock();
+    this.constructInputBlocks();
+    this.updateColor();
   }
 
-  updateOutput(): void {
+  constructTextOutputBlock(): void {
+
+    let notations: string[] = this.c.getNotations();
+
+    this.textOutput = [ 
+      {header: 'RGB', notations: notations},
+      {header: 'HSL', notations: [notations[2], notations[1]]},
+      {header: 'CMYK', notations: [notations[2], notations[1]]}
+    ].map(row => ({
+      header: row.header,
+      notations: row.notations.map(notation => ({name: notation, values: []}))
+    }));
+  }
+
+  constructInputBlocks(): void {
+
+    let rangeNames = this.c.getRangeNames();
+
+    this.inputBlocks = [
+      {name: 'RGB', rangeNames: rangeNames.rgb, ranges: this.ranges.rgb},
+      {name: 'HSL', rangeNames: rangeNames.hsl, ranges: this.ranges.hsl},
+      {name: 'CMYK', rangeNames: rangeNames.cmyk, ranges: this.ranges.cmyk}
+    ].map(block => ({
+      name: block.name + ' Color Space', 
+      ranges: 
+        block.ranges.map((range, i) => ({
+          id: range.id, header: block.rangeNames[i], 
+          min: range.min, max: range.max, value: 0, step: 1
+        }))
+    }));
+  }
+
+  updateColor(): void {
 
     this.color = this.c.getColor();
     let C: Color = this.color;
-    
-    this.rgbArr = [C.rgb.r, C.rgb.g, C.rgb.b];
-    this.hslArr = [C.hsl.h, C.hsl.s * 100, C.hsl.l * 100];
-    this.cmykArr = [C.cmyk.c * 100, C.cmyk.m * 100, C.cmyk.y * 100, C.cmyk.k * 100];
 
-    this.cHex = this.c.RGBtoHex(C.rgb);
-
-    this.textOutputBlocks.forEach(b => {
-      switch (b.header) {
-        case 'RGB':
-          b.valStr = this.c.csv(C.rgb);
-          break;
-        case 'HSL':
-          b.valStr = this.c.csv(C.hsl);
-          break;
-        case 'CMYK':
-          b.valStr = this.c.csv(C.cmyk);
-          break;
-        case 'Hex':
-          b.valStr = this.cHex;
-          break;
-      }
+    this.inputBlocks.forEach(block => {
+      block.ranges.forEach(range => {
+        switch(range.id) {
+          case 'r':
+            range.value = C.rgb.r;
+            break;
+          case 'g':
+            range.value = C.rgb.g;
+            break;
+          case 'b':
+            range.value = C.rgb.b;
+            break;
+          case 'h':
+            range.value = C.hsl.h;
+            break;
+          case 's':
+            range.value = C.hsl.s * 100;
+            break;
+          case 'l':
+            range.value = C.hsl.l * 100;
+            break;
+          case 'c':
+            range.value = C.cmyk.c * 100;
+            break;
+          case 'm':
+            range.value = C.cmyk.m * 100;
+            break;
+          case 'y':
+            range.value = C.cmyk.y * 100;
+            break;
+          case 'k':
+            range.value = C.cmyk.k * 100;
+            break;
+        }
+      })
     });
+
+    this.textOutput.forEach(row => {
+      row.notations.forEach(notation => {
+        notation.values = 
+          this.c.colorStr(this.color, row.header, notation.name);
+      });
+    });
+  }
+
+  setColorFromRange(n: number, id: string) {
+
+    if (['r', 'g', 'b'].includes(id)) this.setColorFromRGB(n, id);
+    if (['h', 's', 'l'].includes(id)) this.setColorFromHSL(n, id);
+    if (['c', 'm', 'y', 'k'].includes(id)) this.setColorFromCMYK(n, id);
   }
 
   setColorFromRGB(n: number, id: string): void {
@@ -69,7 +125,7 @@ export class PrimaryComponent implements OnInit {
     if (id == 'b') rgb.b = n;
 
     this.c.setColorFromRGB(rgb);
-    this.updateOutput();
+    this.updateColor();
   }
 
   setColorFromHSL(n: number, id: string): void {
@@ -81,7 +137,7 @@ export class PrimaryComponent implements OnInit {
     if (id == 'l') hsl.l = n / 100;
 
     this.c.setColorFromHSL(hsl);
-    this.updateOutput();
+    this.updateColor();
   }
 
   setColorFromCMYK(n: number, id: string): void {
@@ -94,7 +150,7 @@ export class PrimaryComponent implements OnInit {
     if (id == 'k') cmyk.k = n / 100;
 
     this.c.setColorFromCMYK(cmyk);
-    this.updateOutput();
+    this.updateColor();
   }
 
 }

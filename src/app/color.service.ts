@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Color, ColorRGB, ColorHSL, ColorCMYK, RangeList } from './interfaces';
+import { Color, ColorRGB, ColorHSL, ColorCMYK, ColorRangeList } from './interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -12,10 +12,11 @@ export class ColorService {
   private color: Color = {
     rgb: {r: 126, g: 126, b: 126},
     hsl: {h: 0, s: 0, l: .5},
-    cmyk: {c: .01, m: .01, y: .01, k: .5}
+    cmyk: {c: .01, m: .01, y: .01, k: .5},
+    hex: '#7E7E7E'
   }
 
-  private ranges: RangeList = {
+  private ranges: ColorRangeList = {
     rgb: [
       {id: 'r', min: 0, max: 255},
       {id: 'g', min: 0, max: 255},
@@ -34,19 +35,38 @@ export class ColorService {
     ]
   }
 
+  private rangeNames = {
+    rgb: ['Red', 'Green', 'Blue'],
+    hsl: ['Hue', 'Saturation', 'Lightness'],
+    cmyk: ['Cyan', 'Magenta', 'Yellow', 'Key']
+  }
+
+  private colorNotations = [
+    'Decimal', 'Arithmetic', 'Percentages', 'Hexadecimal'
+  ];
+
   getColor(): Color {
     return this.color;
   }
 
-  getRanges(): RangeList {
+  getRanges(): ColorRangeList {
     return this.ranges;
+  }
+
+  getRangeNames(): {rgb: string[], hsl: string[], cmyk: string[]} {
+    return this.rangeNames;
+  }
+
+  getNotations(): string[] {
+    return this.colorNotations;
   }
 
   setColorFromRGB(input: ColorRGB): void {
     this.color = {
       rgb: input,
       hsl: this.RGBtoHSL(input),
-      cmyk: this.RGBtoCMYK(input)
+      cmyk: this.RGBtoCMYK(input),
+      hex: this.RGBtoHex(input)
     }
   }
 
@@ -57,7 +77,8 @@ export class ColorService {
     this.color = {
       rgb: crgb,
       hsl: input,
-      cmyk: this.RGBtoCMYK(crgb)
+      cmyk: this.RGBtoCMYK(crgb),
+      hex: this.RGBtoHex(crgb)
     }
   }
 
@@ -68,7 +89,8 @@ export class ColorService {
     this.color = {
       rgb: crgb,
       hsl: this.RGBtoHSL(crgb),
-      cmyk: input
+      cmyk: input,
+      hex: this.RGBtoHex(crgb)
     }
   }
 
@@ -198,6 +220,56 @@ export class ColorService {
     val.forEach((n, i) => {
       str += n + (i == val.length - 1 ? '' : ', ');
     });
+
+    return str;
+  }
+
+  colorStr(c: Color, spaceId: string, notation: string): string[] {
+
+    let str: string[] = [];
+
+    let round = (n: number): string => {return n.toFixed(0)};
+    let arith = (n: number): string => {return n.toFixed(3)};
+    let prcnt = (n: number): string => {return (100 * n).toFixed(0)};
+
+    switch(spaceId) {
+      case 'RGB':
+        switch(notation) {
+          case this.colorNotations[0]:
+            str = [round(c.rgb.r), round(c.rgb.g), round(c.rgb.b)];
+            break;
+          case this.colorNotations[1]:
+            str = [arith(c.rgb.r / 255), arith(c.rgb.g / 255), arith(c.rgb.b / 255)];
+            break;
+          case this.colorNotations[2]:
+            str = [prcnt(c.rgb.r / 255), prcnt(c.rgb.g / 255), prcnt(c.rgb.b / 255)];
+            break;
+          case this.colorNotations[3]:
+            str = ['#'].concat(this.RGBtoHex(c.rgb).substring(1).match(/.{2}/g) as Array<string>);
+            break;
+        }
+        break;
+      case 'HSL':
+        switch(notation) {
+          case this.colorNotations[1]:
+            str = [round(c.hsl.h), arith(c.hsl.s), arith(c.hsl.l)];
+            break;
+          case this.colorNotations[2]:
+            str = [round(c.hsl.h), prcnt(c.hsl.s), prcnt(c.hsl.l)];
+            break;
+        }
+        break;
+      case 'CMYK':
+        switch(notation) {
+          case this.colorNotations[1]:
+            str = [arith(c.cmyk.c), arith(c.cmyk.m), arith(c.cmyk.y), arith(c.cmyk.k)];
+            break;
+          case this.colorNotations[2]:
+            str = [prcnt(c.cmyk.c), prcnt(c.cmyk.m), prcnt(c.cmyk.y), prcnt(c.cmyk.k)];
+            break;
+        }
+        break;
+    }
 
     return str;
   }

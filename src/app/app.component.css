@@ -47,7 +47,7 @@
 .top-menu-option {
   display: inline-flex;
   margin: 0 10px;
-  padding: 20px;
+  padding: 10px 20px;
   background: #181818;
   font-size: 22px;
   cursor: pointer;
@@ -64,10 +64,8 @@
 .top-container {
   display: none;
   flex-basis: 100%;
-  background: #002200;
 }
 
 .top-container.container-selected {
   display: flex;
 }
-
