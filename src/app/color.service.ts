@@ -9,11 +9,11 @@ export class ColorService {
 
   constructor() { }
 
-  private color: Color = {
-    rgb: {r: 126, g: 126, b: 126},
-    hsl: {h: 0, s: 0, l: .5},
-    cmyk: {c: .01, m: .01, y: .01, k: .5},
-    hex: '#7E7E7E'
+  private defaultColor: Color = {
+    rgb: {r: 25, g: 90, b: 25},
+    hsl: {h: 120, s: .57, l: .23},
+    cmyk: {c: .72, m: 0, y: .72, k: .65},
+    hex: '#195A19'
   }
 
   private ranges: ColorRangeList = {
@@ -45,8 +45,8 @@ export class ColorService {
     'Decimal', 'Arithmetic', 'Percentages', 'Hexadecimal'
   ];
 
-  getColor(): Color {
-    return this.color;
+  getDefaultColor(): Color {
+    return this.defaultColor;
   }
 
   getRanges(): ColorRangeList {
@@ -61,8 +61,8 @@ export class ColorService {
     return this.colorNotations;
   }
 
-  setColorFromRGB(input: ColorRGB): void {
-    this.color = {
+  setColorFromRGB(input: ColorRGB): Color {
+    return {
       rgb: input,
       hsl: this.RGBtoHSL(input),
       cmyk: this.RGBtoCMYK(input),
@@ -70,11 +70,11 @@ export class ColorService {
     }
   }
 
-  setColorFromHSL(input: ColorHSL): void {
+  setColorFromHSL(input: ColorHSL): Color {
 
     let crgb: ColorRGB = this.HSLtoRGB(input);
 
-    this.color = {
+    return {
       rgb: crgb,
       hsl: input,
       cmyk: this.RGBtoCMYK(crgb),
@@ -82,11 +82,11 @@ export class ColorService {
     }
   }
 
-  setColorFromCMYK(input: ColorCMYK): void {
+  setColorFromCMYK(input: ColorCMYK): Color {
 
     let crgb: ColorRGB = this.CMYKtoRGB(input);
 
-    this.color = {
+    return {
       rgb: crgb,
       hsl: this.RGBtoHSL(crgb),
       cmyk: input,

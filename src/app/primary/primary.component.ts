@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { 
-  TextOutputBlock, InputRange,
+  InputRange,
   Color, ColorRGB, ColorHSL, ColorCMYK, ColorRangeList } from '../interfaces';
 import { ColorService } from '../color.service';
 
@@ -14,31 +14,14 @@ export class PrimaryComponent implements OnInit {
 
   constructor(private c: ColorService) { }
 
-  color: Color = this.c.getColor();
-
-  textOutput: TextOutputBlock[] = [];
+  color: Color = this.c.getDefaultColor();
 
   ranges: ColorRangeList = this.c.getRanges();
   inputBlocks: {name: string, ranges: InputRange[]}[] = [];
 
   ngOnInit(): void {
-    this.constructTextOutputBlock();
     this.constructInputBlocks();
-    this.updateColor();
-  }
-
-  constructTextOutputBlock(): void {
-
-    let notations: string[] = this.c.getNotations();
-
-    this.textOutput = [ 
-      {header: 'RGB', notations: notations},
-      {header: 'HSL', notations: [notations[2], notations[1]]},
-      {header: 'CMYK', notations: [notations[2], notations[1]]}
-    ].map(row => ({
-      header: row.header,
-      notations: row.notations.map(notation => ({name: notation, values: []}))
-    }));
+    this.updateRanges();
   }
 
   constructInputBlocks(): void {
@@ -59,9 +42,8 @@ export class PrimaryComponent implements OnInit {
     }));
   }
 
-  updateColor(): void {
+  updateRanges(): void {
 
-    this.color = this.c.getColor();
     let C: Color = this.color;
 
     this.inputBlocks.forEach(block => {
@@ -100,23 +82,23 @@ export class PrimaryComponent implements OnInit {
         }
       })
     });
-
-    this.textOutput.forEach(row => {
-      row.notations.forEach(notation => {
-        notation.values = 
-          this.c.colorStr(this.color, row.header, notation.name);
-      });
-    });
   }
 
-  setColorFromRange(n: number, id: string) {
+  setColorFromRange(n: number, id: string): void {
 
-    if (['r', 'g', 'b'].includes(id)) this.setColorFromRGB(n, id);
-    if (['h', 's', 'l'].includes(id)) this.setColorFromHSL(n, id);
-    if (['c', 'm', 'y', 'k'].includes(id)) this.setColorFromCMYK(n, id);
+    if (['r', 'g', 'b'].includes(id)) 
+      this.color = this.setColorFromRGB(n, id);
+
+    if (['h', 's', 'l'].includes(id)) 
+      this.color = this.setColorFromHSL(n, id);
+
+    if (['c', 'm', 'y', 'k'].includes(id)) 
+      this.color = this.setColorFromCMYK(n, id);
+
+    this.updateRanges();
   }
 
-  setColorFromRGB(n: number, id: string): void {
+  setColorFromRGB(n: number, id: string): Color {
 
     let rgb: ColorRGB = this.color.rgb;
 
@@ -124,11 +106,10 @@ export class PrimaryComponent implements OnInit {
     if (id == 'g') rgb.g = n;
     if (id == 'b') rgb.b = n;
 
-    this.c.setColorFromRGB(rgb);
-    this.updateColor();
+    return this.c.setColorFromRGB(rgb);
   }
 
-  setColorFromHSL(n: number, id: string): void {
+  setColorFromHSL(n: number, id: string): Color {
 
     let hsl: ColorHSL = this.color.hsl;
 
@@ -136,11 +117,10 @@ export class PrimaryComponent implements OnInit {
     if (id == 's') hsl.s = n / 100;
     if (id == 'l') hsl.l = n / 100;
 
-    this.c.setColorFromHSL(hsl);
-    this.updateColor();
+    return this.c.setColorFromHSL(hsl);
   }
 
-  setColorFromCMYK(n: number, id: string): void {
+  setColorFromCMYK(n: number, id: string): Color {
 
     let cmyk: ColorCMYK = this.color.cmyk;
 
@@ -149,8 +129,7 @@ export class PrimaryComponent implements OnInit {
     if (id == 'y') cmyk.y = n / 100;
     if (id == 'k') cmyk.k = n / 100;
 
-    this.c.setColorFromCMYK(cmyk);
-    this.updateColor();
+    return this.c.setColorFromCMYK(cmyk);
   }
 
 }
