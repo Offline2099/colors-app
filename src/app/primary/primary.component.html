@@ -1,5 +1,5 @@
 
-<!-- Color Output -->
+<!-- Output Color -->
 <app-output-color
   [color]="color">  
 </app-output-color>
@@ -11,14 +11,11 @@
 
 <!-- Range Inputs -->
 <div class="range-inputs-container">
-  <div 
-    *ngFor="let block of inputBlocks"
-    class="range-inputs-block">
-    <div class="range-inputs-block-header">{{block.name}}</div>
-    <app-range-input
-      *ngFor="let range of block.ranges"
-      [range]="range"
-      (output)="setColorFromRange($event, range.id)">
-    </app-range-input>
-  </div>
+  <app-range-inputs-block
+    *ngFor="let space of spaces"
+    [space]="space"
+    [forcedColor]="color"
+    [displaySample]="false"
+    (output)="updateColor($event)">
+  </app-range-inputs-block>
 </div>

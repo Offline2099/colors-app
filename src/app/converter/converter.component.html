@@ -1,1 +1,56 @@
-<p>converter works!</p>
+
+<!-- Menu -->
+<div class="converter-menu">
+  <div 
+    *ngFor="let b of converters"
+    class="converter-menu-option"
+    [ngClass]="{'option-selected': b.selected}"
+    (click)="switchConverter(b.id)">{{b.name}}</div>
+</div>
+
+<!-- Converters -->
+<div 
+  *ngFor="let c of converters"
+  class="converter-block"
+  [ngClass]="{'converter-selected': c.selected}">
+
+  <!-- Instruction -->
+  <div class="instruction-container">
+    <div class="instruction-text">{{c.instruction}}</div>    
+  </div>
+
+  <!-- Input Notations -->
+  <div 
+    *ngIf="c.inputNotations"
+    class="input-formats">
+    <div 
+    *ngFor="let b of c.inputNotations"
+    class="converter-menu-option"
+    [ngClass]="{'option-selected': b.selected}"
+    (click)="switchNotation(c, b.id)">{{b.name}}</div>
+  </div>
+
+  <!-- Input -->
+  <div class="text-input-container">
+    <input 
+      type="text" value="" maxlength="30" 
+      (input)="updUserInput(c, $event)"
+      (change)="runConverter(c)"/>
+    <div 
+      class="convert-button"
+      (click)="runConverter(c)">Convert</div>
+  </div>
+
+  <div 
+    *ngIf="c.inputError"
+    class="input-error">
+    <div class="input-error-text">{{c.errorText}}</div> 
+  </div>
+
+  <!-- Output -->
+  <app-output-color
+    *ngIf="c.inputAccepted"
+    [color]="c.color">  
+  </app-output-color>
+
+</div>

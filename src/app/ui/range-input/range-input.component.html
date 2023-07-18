@@ -1,9 +1,29 @@
 
 <!-- Header -->
 <div class="input-header">
-  <div class="value-min">{{range.min}}</div>
-  <div class="input-header-text">{{range.header}}&emsp;(&hairsp;{{currentValue}}&hairsp;)</div>
-  <div class="value-max">{{range.max}}</div>
+
+  <div class="value-min">
+    <span>{{range.min}}</span>&hairsp;
+    <span class="percentage-only">%</span>
+    <span class="degree-only">&deg;</span>
+  </div>
+
+  <div class="input-header-text">
+    <span class="input-name">{{range.name}}</span>
+    <span class="input-value">
+      <span>(&hairsp;{{currentValue}}</span>
+      <span class="percentage-only">&hairsp;%</span>
+      <span class="degree-only">&hairsp;&deg;</span>
+      <span>&hairsp;)</span>
+    </span>
+  </div>
+
+  <div class="value-max">
+    <span>{{range.max}}</span>
+    <span class="percentage-only">%</span>
+    <span class="degree-only">&deg;</span>
+  </div>
+
 </div>
 
 <!-- Slider -->

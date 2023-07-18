@@ -1,0 +1,16 @@
+
+<!-- Header -->
+<div class="range-inputs-block-header">{{block.name}}</div>
+
+<!-- Sample -->
+<div 
+  *ngIf="displaySample"
+  class="color-sample"
+  style="background: {{color.hex}};"></div>
+
+<!-- Inputs -->
+<app-range-input
+  *ngFor="let range of block.ranges"
+  [range]="range"
+  (output)="setColorFromRange(range, $event)">
+</app-range-input>

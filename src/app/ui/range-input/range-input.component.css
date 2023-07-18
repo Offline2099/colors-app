@@ -39,6 +39,43 @@
     repeating-linear-gradient(-90deg, #444 0, transparent 1px, transparent 5%);
 }
 
+:host.range-255:after {
+  background: 
+    repeating-linear-gradient(90deg, #444 0, transparent 1px, transparent 12.5%),
+    repeating-linear-gradient(-90deg, #444 0, transparent 1px, transparent 12.5%);
+}
+
+:host.range-255:before {
+  background: 
+    repeating-linear-gradient(90deg, #444 0, transparent 1px, transparent 6.25%),
+    repeating-linear-gradient(-90deg, #444 0, transparent 1px, transparent 6.25%);
+}
+
+:host.range-360:after {
+  background: 
+    repeating-linear-gradient(90deg, #444 0, transparent 1px, transparent 6.25%),
+    repeating-linear-gradient(-90deg, #444 0, transparent 1px, transparent 6.25%);
+}
+
+:host.range-360:before {
+  background: 
+    repeating-linear-gradient(90deg, #444 0, transparent 1px, transparent 3.125%),
+    repeating-linear-gradient(-90deg, #444 0, transparent 1px, transparent 3.125%);
+}
+
+
+/*   Visibility   */
+
+.percentage-only,
+.degree-only {
+  display: none;
+}
+
+:host.range-percentage .percentage-only,
+:host.range-degree .degree-only {
+  display: initial;
+}
+
 
 /*   Header   */
 
@@ -54,25 +91,46 @@
   display: flex;
   flex-basis: 100%;
   justify-content: center;
+  margin: 0 10px;
   background: #282828;
   letter-spacing: .02em;
+}
+
+.input-name {
+  margin-right: .5em;
+}
+
+.input-value {
+  width: 3em;
+  text-align: right;
+}
+
+:host.range-percentage .input-value {
+  width: 3.6em;
+}
+
+:host.range-degree .input-value {
+  width: 3.2em;
 }
 
 .value-min,
 .value-max {
   display: flex;
   align-items: center;
-  width: 30px;
-  margin: 0 10px;
   font-family: 'Inconsolata', monospace;
+  white-space: nowrap;
 }
 
 .value-min {
   justify-content: flex-start;
+  width: 30px;
+  margin-left: 6px;
 }
 
 .value-max {
   justify-content: flex-end;
+  width: 32px;
+  margin-right: 4px;
 }
 
 

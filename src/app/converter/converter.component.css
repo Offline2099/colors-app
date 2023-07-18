@@ -1,0 +1,123 @@
+
+:host {
+  display: flex;
+  flex-basis: 100%;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+
+/*   Menu   */
+
+.converter-menu {
+  display: flex;
+  flex-basis: 100%;
+  justify-content: center;
+  padding: 5px;
+}
+
+.converter-menu-option {
+  display: inline-flex;
+  margin: 0 10px;
+  padding: 10px 20px;
+  background: #181818;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.converter-menu-option.option-selected {
+  background: #222;
+  pointer-events: none;
+}
+
+
+/*   Containers   */
+
+.converter-block {
+  display: none;
+  flex-wrap: wrap;
+  flex-basis: 100%;
+}
+
+.converter-block.converter-selected {
+  display: flex;
+}
+
+
+/*   Instruction   */
+
+.instruction-container {
+  display: flex;
+  flex-basis: 100%;
+  justify-content: center;
+}
+
+.instruction-text {
+  display: flex;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 10px;
+  text-align: center;
+  font-size: 17px;
+  letter-spacing: .01em;
+}
+
+
+/*   Formats   */
+
+.input-formats {
+  display: flex;
+  flex-basis: 100%;
+  justify-content: center;
+}
+
+
+/*   Text Input   */
+
+.text-input-container {
+  display: flex;
+  flex-basis: 100%;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+input[type=text] {
+  width: 400px;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 6px 0 0 6px;
+  background: #333;
+  color: #aaa;
+  font-size: 16px;
+  letter-spacing: .03em;
+}
+
+input[type=text]:focus {
+  outline: none;
+}
+
+.convert-button {
+  padding: 10px 15px;
+  border-radius: 0 6px 6px 0;
+  font-size: 16px;
+  letter-spacing: .03em;
+  background: #222;
+  cursor: pointer;
+}
+
+.input-error {
+  display: flex;
+  flex-basis: 100%;
+  justify-content: center;
+}
+
+.input-error-text {
+  display: flex;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 10px;
+  color: darkred;
+  text-align: center;
+  font-size: 17px;
+  letter-spacing: .01em;
+}

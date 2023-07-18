@@ -21,14 +21,18 @@ export interface Color {
 }
 
 
-// Ranges
+// Color Space Data
 
 export interface Range {
-  id: string; min: number; max: number;
+  id: string; name: string;
+  type: string;
+  min: number; max: number;
 }
 
-export interface ColorRangeList {
-  rgb: Range[]; hsl: Range[]; cmyk: Range[];
+export interface ColorSpace {
+  name: string;
+  ranges: Range[];
+  notations: string[];
 }
 
 
@@ -40,17 +44,37 @@ export interface TopLevelBlock {
   selected: boolean;
 }
 
+export interface InputRange extends Range {
+  value: number;
+  step: number;
+}
+
+export interface InputRangeBlock {
+  name: string;
+  ranges: InputRange[];
+}
+
 export interface TextOutputBlock {
-  header: string;
+  space: string;
   notations: {
     name: string;
     values: string[];
   }[]
 }
 
-export interface InputRange extends Range {
-  header: string;
-  value: number;
-  step: number;
+export interface Converter {
+  id: number;
+  name: string;
+  selected: boolean;
+  instruction: string;
+  inputNotations: {
+    id: number;
+    name: string;
+    selected: boolean;
+  }[];
+  userInput: string;
+  inputAccepted: boolean;
+  inputError: boolean;
+  errorText: string;
+  color: Color;
 }
-
