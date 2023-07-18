@@ -13,6 +13,7 @@ export class OutputColorComponent implements OnInit, DoCheck {
   constructor(private c: ColorService) { }
 
   @Input() color: Color = this.c.default();
+  @Input() headerText: string = '';
 
   textOutput: TextOutputBlock[] = [];
 

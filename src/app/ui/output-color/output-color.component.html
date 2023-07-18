@@ -1,29 +1,36 @@
-<div class="output-container-header">Selected Color</div>
-<div 
-  class="color-output"
-  style="background: {{color.hex}};"></div>
-<div class="text-output">
-  <div
-    *ngFor="let row of textOutput"
-    class="text-output-row">
-    <div class="text-output-row-header">{{row.space}}</div>
-    <div class="text-output-row-body">
-      <div 
-        *ngFor="let notation of row.notations"
-        class="text-output-notation">
-        <div class="text-output-notation-name">{{notation.name}}</div>
-        <div class="text-output-notation-values">
-          <ng-container *ngFor="let value of notation.values; index as v">
-            <span 
-              class="text-output-value"
-              [ngClass]="{
-                'text-output-value-short': value.length < 4,
-                'text-output-value-hex': notation.values[0] == '#'
-              }">{{value}}</span>
-            <span *ngIf="v + 1 != notation.values.length && notation.values[0] != '#'">,</span>
-          </ng-container>
+
+<!-- Header -->
+<div class="output-container-header">{{headerText}}</div>
+
+<div class="output-container-data">
+
+  <!-- Color Sample -->
+  <div 
+    class="color-output"
+    style="background: {{color.hex}};"></div>
+
+  <!-- Text -->
+  <div class="text-output">
+    <div
+      *ngFor="let row of textOutput"
+      class="text-output-row">
+      <div class="text-output-row-header">{{row.space}}</div>
+      <div class="text-output-row-body">
+        <div 
+          *ngFor="let notation of row.notations"
+          class="text-output-notation">
+          <div class="text-output-notation-name">{{notation.name}}</div>
+          <div class="text-output-notation-values">
+            <ng-container *ngFor="let value of notation.values; index as v">
+              <span 
+                class="text-output-value"
+                [ngClass]="{'text-output-value-hex': notation.values[0] == '#'}">{{value}}</span>
+              <span *ngIf="v + 1 != notation.values.length && notation.values[0] != '#'">,</span>
+            </ng-container>
+          </div>
         </div>
       </div>
     </div>
   </div>
+
 </div>
