@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { 
-  Converter,
+  Converter, MenuOption,
   Color, ColorRGB, ColorHSL, ColorCMYK } from '../interfaces';
 import { ColorService } from '../color.service';
 
@@ -15,41 +15,53 @@ export class ConverterComponent implements OnInit {
   constructor(private c: ColorService) { }
 
   converters: Converter[] = [];
+  converterMenu: MenuOption[] = [];
+  notationsMenu: MenuOption[][] = [];
 
   ngOnInit(): void {
     this.constructConverters();
+    this.constructConverterMenu();
+    this.constructNotationsMenu();
   }
 
   constructConverters(): void {
 
-    let inputNotations: string[][] = [
-      ['Decimal', 'Percentages', 'Arithmetic'],
-      ['Percentages', 'Arithmetic'],
-      ['Percentages', 'Arithmetic'],
-      []
-    ];
-
     this.converters = 
-      this.c.spaces().map(space => space.name).concat('Hexadecimal')
-        .map((converterName, index) => ({
-          name: converterName, notations: inputNotations[index]
+      this.c.spaces().map(space => ({
+        name: space.name, 
+        notations: space.name == 'RGB' ? space.notations.slice(0, -1) : space.notations
+      })).concat({name: 'Hexadecimal', notations: []})
+        .map((converter, i) => ({
+          id: i + 1,
+          name: converter.name,
+          selected: !i,
+          instruction: 'Input a valid ' + converter.name + ' color. It will be converted to other color spaces.',
+          inputNotations: 
+            converter.notations.length ?
+              converter.notations.map((notation, j) => ({
+                id: j + 1, name: notation, selected: !j
+              })) : [],
+          userInput: '',
+          inputAccepted: false,
+          inputError: false,
+          errorText: 'Error. Please input a valid ' + converter.name + ' color.',
+          color: this.c.default()
+        }));
+  }
+
+  constructConverterMenu(): void {
+    this.converterMenu = this.converters.map(converter => ({
+      id: converter.id, optionText: converter.name, selected: converter.selected
+    }));
+  }
+
+  constructNotationsMenu(): void {
+    this.notationsMenu = 
+      this.converters.map(converter => converter.inputNotations
+        .map(notation => ({
+          id: notation.id, optionText: notation.name, selected: notation.selected
         }))
-          .map((converter, i) => ({
-            id: i + 1,
-            name: converter.name,
-            selected: !i,
-            instruction: 'Input a valid ' + converter.name + ' color.',
-            inputNotations: 
-              converter.notations.length ?
-                converter.notations.map((notation, j) => ({
-                  id: j + 1, name: notation, selected: !j
-                })) : [],
-            userInput: '',
-            inputAccepted: false,
-            inputError: false,
-            errorText: 'Error. Please input a valid ' + converter.name + ' color.',
-            color: this.c.default()
-          }));
+      );
   }
 
   switchConverter(converterId: number): void {
@@ -263,9 +275,9 @@ export class ConverterComponent implements OnInit {
     let cmyk: number[] = this.inputToNumbers(s);
 
     if (notation == 1) 
-      return {c: cmyk[0] / 100, m: cmyk[1] / 100, y: cmyk[2] / 100, k: cmyk[2] / 100}
+      return {c: cmyk[0] / 100, m: cmyk[1] / 100, y: cmyk[2] / 100, k: cmyk[3] / 100}
     if (notation == 2) 
-      return {c: cmyk[0], m: cmyk[1], y: cmyk[2], k: cmyk[2]}
+      return {c: cmyk[0], m: cmyk[1], y: cmyk[2], k: cmyk[3]}
 
     return this.c.default().cmyk;
   }

@@ -1,16 +1,14 @@
 
 <!-- Menu -->
-<div class="converter-menu">
-  <div 
-    *ngFor="let b of converters"
-    class="converter-menu-option"
-    [ngClass]="{'option-selected': b.selected}"
-    (click)="switchConverter(b.id)">{{b.name}}</div>
-</div>
+<app-choose-one
+  [menu]="converterMenu"
+  menuStyle="converter-menu"
+  (selectOption)="switchConverter($event)">
+</app-choose-one>
 
 <!-- Converters -->
 <div 
-  *ngFor="let c of converters"
+  *ngFor="let c of converters; index as i"
   class="converter-block"
   [ngClass]="{'converter-selected': c.selected}">
 
@@ -23,11 +21,13 @@
   <div 
     *ngIf="c.inputNotations"
     class="input-formats">
-    <div 
-    *ngFor="let b of c.inputNotations"
-    class="converter-menu-option"
-    [ngClass]="{'option-selected': b.selected}"
-    (click)="switchNotation(c, b.id)">{{b.name}}</div>
+    <app-choose-one
+      *ngIf="notationsMenu[i].length"
+      [menu]="notationsMenu[i]"
+      menuStyle="inline-menu"
+      label="Use input format:"
+      (selectOption)="switchNotation(c, $event)">
+    </app-choose-one>
   </div>
 
   <!-- Input -->

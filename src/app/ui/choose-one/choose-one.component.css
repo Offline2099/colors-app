@@ -1,0 +1,116 @@
+
+:host {
+  display: flex;
+  align-items: center;
+  flex-basis: 100%;
+  justify-content: center;
+}
+
+.label-text {
+  display: none;
+}
+
+.menu-option {
+  display: inline-flex;
+  user-select: none;
+  transition: .3s;
+}
+
+.menu-option.option-selected {
+  pointer-events: none;
+}
+
+.menu-option-circle-outer {
+  display: none;
+}
+
+.menu-option-circle-inner {
+  display: none;
+}
+
+.option-selected .menu-option-circle-inner {
+  display: inline-flex;
+}
+
+
+/*   Top Level Menu   */
+
+:host.top-level-menu {
+  position: absolute;
+  top: 65px;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+:host.top-level-menu .menu-option {
+  margin: 0 10px;
+  padding: 10px 20px;
+  border-radius: 6px;
+  background: #222;
+  box-shadow: 0 0 2px 2px #333 inset, 0 0 1px 1px #181818;
+  font-size: 22px;
+  letter-spacing: .02em;
+  cursor: pointer;
+}
+
+:host.top-level-menu .menu-option.option-selected {
+  background: #2a2a2a;
+}
+
+
+/*   Converter Menu   */
+
+:host.converter-menu .menu-option {
+  margin: 0 5px;
+  padding: 10px 20px;
+  border-radius: 6px 6px 0 0;
+  color: #999;
+  background: rgba(34, 34, 34, .5);
+  box-shadow: 0 0 2px 2px rgba(42, 42, 42, .5) inset;
+  font-size: 18px;
+  letter-spacing: .02em;
+  cursor: pointer;
+}
+
+:host.converter-menu .menu-option.option-selected {
+  color: #aaa;
+  background: rgba(42, 42, 42, 1);
+  box-shadow: none;
+}
+
+
+/*   Inline Menu   */
+
+:host.inline-menu .label-text {
+  display: inline-flex;
+  margin-right: 10px;
+}
+
+:host.inline-menu .menu-option {
+  align-items: center;
+  margin: 0 5px;
+  padding: 10px;
+  font-size: 16px;
+  letter-spacing: .02em;
+  cursor: pointer;
+}
+
+:host.inline-menu .menu-option-circle-outer {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  margin-right: 10px;
+  border: 1px solid #444;
+  border-radius: 50%;
+  background: #222;
+}
+
+:host.inline-menu .menu-option-circle-inner {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: green;
+}

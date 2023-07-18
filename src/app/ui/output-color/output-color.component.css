@@ -5,8 +5,10 @@
   flex-wrap: wrap;
   width: min(1000px, 100%);
   margin: 0 auto 10px auto;
-  border-radius: 10px;
+  border-radius: 15px;
   padding: 5px 10px 10px 10px;
+  background: linear-gradient(#181818, #141414);
+  box-shadow: 0 0 2px 2px #1c1c1c inset;
 }
 
 .output-container-header {

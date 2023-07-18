@@ -25,7 +25,7 @@ export class ColorService {
         {id: 'g', name: 'Green', type: 'decimal', min: 0, max: 255},
         {id: 'b', name: 'Blue', type: 'decimal', min: 0, max: 255}
       ],
-      notations: ['Decimal', 'Arithmetic', 'Percentages', 'Hexadecimal']
+      notations: ['Decimal', 'Percentages', 'Arithmetic', 'Hexadecimal']
     },
     {
       name: 'HSL',

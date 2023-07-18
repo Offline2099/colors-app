@@ -3,31 +3,9 @@
   display: flex;
   flex-basis: 100%;
   flex-wrap: wrap;
+  align-content: flex-start;
   justify-content: center;
-}
-
-
-/*   Menu   */
-
-.converter-menu {
-  display: flex;
-  flex-basis: 100%;
-  justify-content: center;
-  padding: 5px;
-}
-
-.converter-menu-option {
-  display: inline-flex;
-  margin: 0 10px;
-  padding: 10px 20px;
-  background: #181818;
-  font-size: 22px;
-  cursor: pointer;
-}
-
-.converter-menu-option.option-selected {
-  background: #222;
-  pointer-events: none;
+  height: 100%;
 }
 
 
@@ -37,6 +15,19 @@
   display: none;
   flex-wrap: wrap;
   flex-basis: 100%;
+  align-content: flex-start;
+  height: calc(100% - 90px);
+  margin: 0 20px;
+  padding: 10px 0;
+  border-radius: 10px;
+  background: rgba(34, 34, 34, .5);
+  box-shadow: 
+    0 0 5px 5px rgba(42, 42, 42, 1) inset,
+    0 0 40px 20px rgba(42, 42, 42, .5) inset;
+}
+
+.converter-block > * {
+  animation: fadeIn .6s;
 }
 
 .converter-block.converter-selected {

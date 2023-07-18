@@ -8,6 +8,8 @@
   margin: 5px 10px;
   padding: 10px;
   border-radius: 10px;
+  background: linear-gradient(#181818, #141414);
+  box-shadow: 0 0 2px 2px #1c1c1c inset;
 }
 
 .range-inputs-block-header {

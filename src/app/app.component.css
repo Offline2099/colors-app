@@ -11,18 +11,20 @@
 .header {
   display: flex;
   flex-basis: 100%;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  height: 70px;
+  height: 75px;
+  padding-top: 15px;
   background: #282828;
   font-size: 26px;
+  letter-spacing: .03em;
 }
 
 .main-wrapper {
   display: flex;
   flex-basis: 100%;
   flex-wrap: wrap;
-  height: calc(100% - 130px);
+  height: calc(100% - 150px);
   align-content: flex-start;
 }
 
@@ -35,37 +37,103 @@
 }
 
 
-/*   Menu   */
-
-.top-menu {
-  display: flex;
-  flex-basis: 100%;
-  justify-content: center;
-  padding: 5px;
-}
-
-.top-menu-option {
-  display: inline-flex;
-  margin: 0 10px;
-  padding: 10px 20px;
-  background: #181818;
-  font-size: 22px;
-  cursor: pointer;
-}
-
-.top-menu-option.option-selected {
-  background: #222;
-  pointer-events: none;
-}
-
-
 /*   Containers   */
 
-.top-container {
+.top-level-container {
+  position: relative;
   display: none;
   flex-basis: 100%;
+  align-items: flex-start;
+  min-height: calc(100% - 55px);
+  padding-top: 60px;
+  animation: fadeIn 1s;
+  overflow: hidden;
 }
 
-.top-container.container-selected {
+.top-level-container:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  background: 
+    conic-gradient(
+      hsl(0, 50%, 10%) 0deg,
+      hsl(15, 50%, 10%) 15deg,
+      hsl(30, 50%, 10%) 30deg,
+      hsl(45, 50%, 10%) 45deg,
+      hsl(60, 50%, 10%) 60deg,
+      hsl(75, 50%, 10%) 75deg,
+      hsl(90, 50%, 10%) 90deg,
+      hsl(105, 50%, 10%) 105deg,
+      hsl(120, 50%, 10%) 120deg,
+      hsl(135, 50%, 10%) 135deg,
+      hsl(150, 50%, 10%) 150deg,
+      hsl(165, 50%, 10%) 165deg,
+      hsl(180, 50%, 10%) 180deg,
+      hsl(195, 50%, 10%) 195deg,
+      hsl(210, 50%, 10%) 210deg,
+      hsl(225, 50%, 10%) 225deg,
+      hsl(240, 50%, 10%) 240deg,
+      hsl(255, 50%, 10%) 255deg,
+      hsl(270, 50%, 10%) 270deg,
+      hsl(285, 50%, 10%) 285deg,
+      hsl(300, 50%, 10%) 300deg,
+      hsl(315, 50%, 10%) 315deg,
+      hsl(330, 50%, 10%) 330deg,
+      hsl(345, 50%, 10%) 345deg,
+      hsl(360, 50%, 10%) 360deg);
+}
+
+.top-level-container:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 50%, #111, transparent);
+  filter: blur(100px);
+}
+
+.top-level-container:last-of-type:before {
+  background: 
+    repeating-linear-gradient(
+      hsl(0, 50%, 10%) 0px,
+      hsl(15, 50%, 10%) 44px,
+      hsl(30, 50%, 10%) 88px,
+      hsl(45, 50%, 10%) 132px,
+      hsl(60, 50%, 10%) 176px,
+      hsl(75, 50%, 10%) 220px,
+      hsl(90, 50%, 10%) 264px,
+      hsl(105, 50%, 10%) 308px,
+      hsl(120, 50%, 10%) 352px,
+      hsl(135, 50%, 10%) 396px,
+      hsl(150, 50%, 10%) 440px,
+      hsl(165, 50%, 10%) 484px,
+      hsl(180, 50%, 10%) 528px,
+      hsl(195, 50%, 10%) 572px,
+      hsl(210, 50%, 10%) 616px,
+      hsl(225, 50%, 10%) 660px,
+      hsl(240, 50%, 10%) 704px,
+      hsl(255, 50%, 10%) 748px,
+      hsl(270, 50%, 10%) 792px,
+      hsl(285, 50%, 10%) 836px,
+      hsl(300, 50%, 10%) 880px,
+      hsl(315, 50%, 10%) 924px,
+      hsl(330, 50%, 10%) 968px,
+      hsl(345, 50%, 10%) 1012px,
+      hsl(360, 50%, 10%) 1056px);
+}
+
+.top-level-container:last-of-type:after {
+  background: rgba(17, 17, 17, .6);
+}
+
+.top-level-container.container-selected {
   display: flex;
 }

@@ -1,0 +1,12 @@
+
+<div class="label-text">{{label}}</div>
+<div 
+  *ngFor="let button of menu"
+  class="menu-option"
+  [ngClass]="{'option-selected': button.selected}"
+  (click)="selectMenuOption(button.id)">
+    <span class="menu-option-circle-outer">
+      <span class="menu-option-circle-inner"></span>
+    </span>
+    <span>{{button.optionText}}</span>
+</div>

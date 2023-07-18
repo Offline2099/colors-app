@@ -38,9 +38,9 @@ export interface ColorSpace {
 
 // UI Blocks
 
-export interface TopLevelBlock {
+export interface MenuOption {
   id: number;
-  menuBtnText: string;
+  optionText: string;
   selected: boolean;
 }
 

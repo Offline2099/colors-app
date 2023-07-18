@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { TopLevelBlock } from './interfaces';
+import { MenuOption } from './interfaces';
 
 @Component({
   selector: 'app-root',
@@ -9,23 +9,28 @@ import { TopLevelBlock } from './interfaces';
 })
 export class AppComponent implements OnInit {
 
-  topLevelBlocks: TopLevelBlock[] = [];
+  topLevelOptions: MenuOption[] = [];
+
+  topLevelOptionsText: string[] = 
+    ['Slider Input', 'Text Input', 'Learn'];
 
   ngOnInit() {
     this.constructTopLevelBlocks();
   }
 
   constructTopLevelBlocks(): void {
-    ['Play', 'Convert', 'Learn'].forEach((t, i) => {
-      this.topLevelBlocks.push({
+    this.topLevelOptionsText.forEach((t, i) => {
+      this.topLevelOptions.push({
         id: i,
-        menuBtnText: t,
-        selected: !i
+        optionText: t,
+        selected: i == 2
       });
     });
   }
 
   switchTopLevelBlock(id: number) {
-    this.topLevelBlocks.forEach(b => {b.selected = b.id == id})
+    this.topLevelOptions.forEach(option => {
+      option.selected = option.id == id
+    });
   }
 }

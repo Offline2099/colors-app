@@ -6,7 +6,8 @@
   flex-basis: 100%;
   padding: 5px 8px 0 8px;
   border-radius: 5px;
-  background: #222;
+  background: #242424;
+  box-shadow: 0 0 2px 2px #282828 inset;
 }
 
 :host:after {
@@ -17,11 +18,11 @@
   z-index: 5;
   width: calc(100% - 16px - 14px);
   height: 22px;
-  border-left: 1px solid #444;
-  border-right: 1px solid #444;
+  border-left: 1px solid #4a4a4a;
+  border-right: 1px solid #4a4a4a;
   background: 
-    repeating-linear-gradient(90deg, #444 0, transparent 1px, transparent 10%),
-    repeating-linear-gradient(-90deg, #444 0, transparent 1px, transparent 10%);
+    repeating-linear-gradient(90deg, #4a4a4a 0, transparent 1px, transparent 10%),
+    repeating-linear-gradient(-90deg, #4a4a4a 0, transparent 1px, transparent 10%);
 }
 
 :host:before {
@@ -32,35 +33,35 @@
   z-index: 5;
   width: calc(100% - 16px - 14px);
   height: 16px;
-  border-left: 1px solid #444;
-  border-right: 1px solid #444;
+  border-left: 1px solid #4a4a4a;
+  border-right: 1px solid #4a4a4a;
   background: 
-    repeating-linear-gradient(90deg, #444 0, transparent 1px, transparent 5%),
-    repeating-linear-gradient(-90deg, #444 0, transparent 1px, transparent 5%);
+    repeating-linear-gradient(90deg, #4a4a4a 0, transparent 1px, transparent 5%),
+    repeating-linear-gradient(-90deg, #4a4a4a 0, transparent 1px, transparent 5%);
 }
 
 :host.range-255:after {
   background: 
-    repeating-linear-gradient(90deg, #444 0, transparent 1px, transparent 12.5%),
-    repeating-linear-gradient(-90deg, #444 0, transparent 1px, transparent 12.5%);
+    repeating-linear-gradient(90deg, #4a4a4a 0, transparent 1px, transparent 12.5%),
+    repeating-linear-gradient(-90deg, #4a4a4a 0, transparent 1px, transparent 12.5%);
 }
 
 :host.range-255:before {
   background: 
-    repeating-linear-gradient(90deg, #444 0, transparent 1px, transparent 6.25%),
-    repeating-linear-gradient(-90deg, #444 0, transparent 1px, transparent 6.25%);
+    repeating-linear-gradient(90deg, #4a4a4a 0, transparent 1px, transparent 6.25%),
+    repeating-linear-gradient(-90deg, #4a4a4a 0, transparent 1px, transparent 6.25%);
 }
 
 :host.range-360:after {
   background: 
-    repeating-linear-gradient(90deg, #444 0, transparent 1px, transparent 6.25%),
-    repeating-linear-gradient(-90deg, #444 0, transparent 1px, transparent 6.25%);
+    repeating-linear-gradient(90deg, #4a4a4a 0, transparent 1px, transparent 6.25%),
+    repeating-linear-gradient(-90deg, #4a4a4a 0, transparent 1px, transparent 6.25%);
 }
 
 :host.range-360:before {
   background: 
-    repeating-linear-gradient(90deg, #444 0, transparent 1px, transparent 3.125%),
-    repeating-linear-gradient(-90deg, #444 0, transparent 1px, transparent 3.125%);
+    repeating-linear-gradient(90deg, #4a4a4a 0, transparent 1px, transparent 3.125%),
+    repeating-linear-gradient(-90deg, #4a4a4a 0, transparent 1px, transparent 3.125%);
 }
 
 
@@ -92,7 +93,7 @@
   flex-basis: 100%;
   justify-content: center;
   margin: 0 10px;
-  background: #282828;
+  background: #2c2c2c;
   letter-spacing: .02em;
 }
 

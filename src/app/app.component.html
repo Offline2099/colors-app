@@ -2,27 +2,32 @@
 <div class="header">Color Spaces</div>
 
 <div class="main-wrapper">
-  <div class="top-menu">
-    <div 
-      *ngFor="let b of topLevelBlocks"
-      class="top-menu-option"
-      [ngClass]="{'option-selected': b.selected}"
-      (click)="switchTopLevelBlock(b.id)">{{b.menuBtnText}}</div>
-  </div>
-  <div 
-    *ngFor="let b of topLevelBlocks"
-    class="top-container"
-    [ngClass]="{'container-selected': b.selected}">
 
-    <ng-container *ngIf="b.id == 0">
+  <!-- Top Level Menu -->
+  <app-choose-one
+    [menu]="topLevelOptions"
+    menuStyle="top-level-menu"
+    (selectOption)="switchTopLevelBlock($event)">
+  </app-choose-one>
+
+  <!-- Top Level Blocks -->
+  <div 
+    *ngFor="let option of topLevelOptions"
+    class="top-level-container"
+    [ngClass]="{'container-selected': option.selected}">
+
+    <!-- Slider Input -->
+    <ng-container *ngIf="option.id == 0">
       <app-primary></app-primary>
     </ng-container>
 
-    <ng-container *ngIf="b.id == 1">
+    <!-- Text Input -->
+    <ng-container *ngIf="option.id == 1">
       <app-converter></app-converter>
-    </ng-container>
+      </ng-container>
 
-    <ng-container *ngIf="b.id == 2">
+    <!-- Info -->
+    <ng-container *ngIf="option.id == 2">
       <app-info></app-info>
     </ng-container>
       
