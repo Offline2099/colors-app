@@ -24,8 +24,15 @@
             <ng-container *ngFor="let value of notation.values; index as v">
               <span 
                 class="text-output-value"
-                [ngClass]="{'text-output-value-hex': notation.values[0] == '#'}">{{value}}</span>
-              <span *ngIf="v + 1 != notation.values.length && notation.values[0] != '#'">,</span>
+                [ngClass]="{
+                  'text-output-value-hex': notation.name == 'Hexadecimal'
+                }">{{value}}</span>
+              <span
+                *ngIf="notation.name == 'Percentages' && !(row.space == 'HSL' && !v)"
+                class="text-output-value-percent">%</span>
+              <span 
+                *ngIf="notation.name != 'Hexadecimal'"
+                class="text-output-value-comma">,</span>
             </ng-container>
           </div>
         </div>

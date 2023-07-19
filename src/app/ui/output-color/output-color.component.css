@@ -106,17 +106,27 @@
   margin-top: 1px;
 }
 
-.text-output-value {
+.text-output-value,
+.text-output-value-percent {
   margin-right: 1px;
   margin-left: .5em;
   padding-top: 2px;
-  color: darkgoldenrod;
+  color: #b8860b;
   text-align: right;
   font-family: 'Inconsolata', monospace;
   font-weight: 500;
   letter-spacing: 0.02em;
 }
 
+.text-output-value-percent {
+  margin-left: 1px;
+  color: #916a08;
+}
+
 .text-output-value-hex {
   margin: 0 1px;
+}
+
+.text-output-value-comma:last-of-type {
+  display: none;
 }
