@@ -54,12 +54,37 @@
 }
 
 
-/*   Formats   */
+/*   Example   */
 
-.input-formats {
+.example-container {
   display: flex;
   flex-basis: 100%;
   justify-content: center;
+}
+
+.example-text {
+  display: flex;
+  align-items: center;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 10px;
+  text-align: center;
+  letter-spacing: .01em;
+  animation: fadeIn .5s;
+}
+
+.example-text-label {
+  margin-right: 20px;
+  padding-bottom: 2px;
+}
+
+.example-string {
+  padding: 5px 10px;
+  background: #282828;
+  border-radius: 4px;
+  font-family: 'Inconsolata', monospace;
+  font-weight: 500;
+  letter-spacing: 0.02em;
 }
 
 
@@ -96,19 +121,38 @@ input[type=text]:focus {
   cursor: pointer;
 }
 
-.input-error {
+
+/*   Errors   */
+
+.error-container {
   display: flex;
-  flex-basis: 100%;
-  justify-content: center;
+  flex-wrap: wrap;
+  width: min(800px, 100%);
+  margin: 0 auto;
+  padding: 10px;
+  border-radius: 10px;
+  background: rgba(48, 0, 0, .3);
+  animation: none;
 }
 
 .input-error-text {
   display: flex;
-  max-width: 1000px;
+  flex-basis: 100%;
+  align-items: center;
   margin: 0 auto;
-  padding: 10px;
+  padding: 5px 10px;
   color: darkred;
   text-align: center;
   font-size: 17px;
   letter-spacing: .01em;
+  animation: fadeIn .5s;
+}
+
+.input-error-text.single-error {
+  justify-content: center;
+}
+
+.input-error-symbol {
+  margin-right: 20px;
+  font-size: 22px;
 }

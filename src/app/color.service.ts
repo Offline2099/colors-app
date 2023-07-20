@@ -268,13 +268,15 @@ export class ColorService {
     }
   }
 
-  colorStr(c: Color, space: string, notation: string): string[] {
+  colorStr(c: Color, space: string, notation: string, includePercent?: boolean): string[] {
 
     let str: string[] = [];
 
     let round = (n: number): string => {return Math.abs(n).toFixed(0)};
     let arith = (n: number): string => {return Math.abs(n).toFixed(3)};
-    let prcnt = (n: number): string => {return Math.abs(100 * n).toFixed(0)};
+    let prcnt = (n: number): string => {
+      return Math.abs(100 * n).toFixed(0) + (includePercent ? '%' : '')
+    };
 
     switch(space) {
       case 'RGB':

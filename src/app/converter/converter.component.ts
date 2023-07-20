@@ -15,6 +15,7 @@ export class ConverterComponent implements OnInit {
   constructor(private c: ColorService) { }
 
   converters: Converter[] = [];
+
   converterMenu: MenuOption[] = [];
   notationsMenu: MenuOption[][] = [];
 
@@ -22,10 +23,17 @@ export class ConverterComponent implements OnInit {
     this.constructConverters();
     this.constructConverterMenu();
     this.constructNotationsMenu();
+    this.generateExamples();
   }
 
-  constructConverters(): void {
 
+  /****************************************************************************
+  *
+  *  Preparing the Component's Structure
+  *
+  ****************************************************************************/
+
+  constructConverters(): void {
     this.converters = 
       this.c.spaces().map(space => ({
         name: space.name, 
@@ -35,7 +43,10 @@ export class ConverterComponent implements OnInit {
           id: i + 1,
           name: converter.name,
           selected: !i,
-          instruction: 'Input a valid ' + converter.name + ' color. It will be converted to other color spaces.',
+          instruction: 
+            'Input a valid ' + converter.name + ' color. ' +
+            'It will be converted to the other color spaces.',
+          examples: [],
           inputNotations: 
             converter.notations.length ?
               converter.notations.map((notation, j) => ({
@@ -44,7 +55,9 @@ export class ConverterComponent implements OnInit {
           userInput: '',
           inputAccepted: false,
           inputError: false,
-          errorText: 'Error. Please input a valid ' + converter.name + ' color.',
+          errorList: [],
+          inputWarning: false,
+          warningList: [],
           color: this.c.default()
         }));
   }
@@ -56,25 +69,52 @@ export class ConverterComponent implements OnInit {
   }
 
   constructNotationsMenu(): void {
-    this.notationsMenu = 
-      this.converters.map(converter => converter.inputNotations
-        .map(notation => ({
-          id: notation.id, optionText: notation.name, selected: notation.selected
-        }))
-      );
+    this.notationsMenu = this.converters.map(converter => 
+      converter.inputNotations.map(notation => ({
+        id: notation.id, optionText: notation.name, selected: notation.selected
+      }))
+    );
   }
 
+  generateExamples(): void {
+
+    let exampleColor: Color = this.c.default();
+
+    this.converters.forEach(converter => {
+      if (converter.inputNotations.length) {
+        converter.examples = converter.inputNotations.map(notation => 
+          this.c.colorStr(exampleColor, converter.name, notation.name, true).join(', ')
+        );
+      }
+      else {
+        if (converter.name == 'Hexadecimal')
+          converter.examples = [this.c.colorStr(exampleColor, 'RGB', 'Hexadecimal').join('')];
+      }
+    });
+  }
+
+
+  /****************************************************************************
+  *
+  *  Querying or Manipulating the Component's Structure
+  *
+  ****************************************************************************/
+
   switchConverter(converterId: number): void {
-    this.converters.forEach(c => {c.selected = c.id == converterId});
+    this.converters.forEach(converter => {
+      converter.selected = converter.id == converterId;
+    });
   }
 
   switchNotation(converter: Converter, notationId: number): void {
-    converter.inputNotations.forEach(n => {n.selected = n.id == notationId});
+    converter.inputNotations.forEach(notation => {
+      notation.selected = notation.id == notationId;
+    });
   }
 
   currentNotation(converter: Converter): number {
     return converter.inputNotations.length ? 
-      converter.inputNotations.find(n => n.selected)!.id || 1 : -1;
+      converter.inputNotations.find(notation => notation.selected)!.id || 1 : -1;
   }
 
   updUserInput(converter: Converter, e: Event): void {
@@ -85,133 +125,237 @@ export class ConverterComponent implements OnInit {
 
     let notation = this.currentNotation(converter);
 
-    converter.inputAccepted = false;
-    converter.inputError = false;
-
-    if (!converter.userInput) return;
-
     this.validateUserInput(converter, notation);
 
-    if (converter.inputAccepted) this.setColorFromInput(converter, notation);
+    if (converter.inputAccepted) 
+      this.setColorFromInput(converter, notation);
     else converter.inputError = true;
   }
 
+
+  /****************************************************************************
+  *
+  *  Input String Validation
+  *
+  ****************************************************************************/
+
   validateUserInput(converter: Converter, notation: number): void {
-    switch(converter.id) {
-      case 1:
-        converter.inputAccepted = this.validRGB(converter.userInput, notation);
-        break;
-      case 2:
-        converter.inputAccepted = this.validHSL(converter.userInput, notation);
-        break;
-      case 3:
-        converter.inputAccepted = this.validCMYK(converter.userInput, notation);
-        break;
-      case 4:
-        converter.inputAccepted = this.validHex(converter.userInput);
-        break;
+
+    converter.inputAccepted = false;
+    converter.inputError = false;
+    converter.errorList = [];
+    converter.inputWarning = false;
+    converter.warningList = [];
+
+    if (!converter.userInput) {
+      converter.errorList.push('The input is empty.');
+      return;
     }
+
+    if (converter.id != 4) this.validateCSV(converter, notation);
+    else this.validateHex(converter)
+
+    converter.inputAccepted = converter.errorList.length == 0;
+  }
+  
+  validateCSV(converter: Converter, notation: number): void {
+
+    let s: string = converter.userInput.slice();
+    let values: string[] = s.split(',');
+
+    let numberOfValuesIsValid: boolean =
+      this.checkNumberOfValues(converter, notation, values);
+
+    this.checkUnexpectedSymbols(converter, s);
+    this.checkParanthesesPlacement(converter, s);
+    this.checkPercentSignPlacement(converter, notation, values);
+
+    if (numberOfValuesIsValid && this.checkAllValuesAreNumeric(converter, values))
+      this.validateRanges(converter, notation, this.inputToNumbers(s));
+  }
+  
+  checkNumberOfValues(c: Converter, notation: number, values: string[]): boolean {
+
+    let expected: number = 0;
+    let L: number = values.length;
+
+    if (c.id == 1 || c.id == 2) expected = 3;
+    if (c.id == 3) expected = 4;
+
+    if (L != expected)
+      c.errorList.push(
+        'The input must contain ' + expected + 
+        ' values separated by ' + (expected - 1) + ' commas. ' + 
+        'Found ' + L + ' value' + (L > 1 ? 's' : '') + ' total.'
+      );
+
+    return L == expected;
   }
 
-  validRGB(string: string, notation: number): boolean {
+  checkUnexpectedSymbols(c: Converter, s: string): void {
 
-    if (this.hasInvalidStructure(string, 2)) return false;
+    // Allowed symbols : digits, percent signs, spaces, dots, commas, parentheses
 
-    let rgb: number[] = this.inputToNumbers(string);
-    let r: number = rgb[0];
-    let g: number = rgb[1];
-    let b: number = rgb[2];
+    if (!s.match(/^[\d\%\s.,()]+$/)) 
+      c.errorList.push('The input contains unexpected symbols.');
+  }
+
+  checkParanthesesPlacement(c: Converter, s: string): void {
+
+    // Parentheses cannot be anywhere in the middle (ignoring spaces)
+
+    if (s.replace(/\s/g, '').slice(1, -1).search(/[()]/) >= 0)
+      c.errorList.push(
+        'Parantheses can only be present at the beginning or end of the input.'
+      );
+  }
+
+  checkPercentSignPlacement(c: Converter, notation: number, values: string[]): void {
+
+    // Percent sign cannot be in a value that is not expected as a percentage
 
     if (
-      r < 0 || g < 0 || b < 0 ||
-      (notation == 1 && (r > 255 || g > 255 || b > 255)) ||
-      (notation == 2 && (r > 100 || g > 100 || b > 100)) ||
-      (notation == 3 && (r > 1 || g > 1 || b > 1))
-    ) return false;
-
-    return true;
+      (values.join('').includes('%') && 
+        ((c.id == 1 && notation != 2) || 
+          ((c.id == 2 || c.id == 3) && notation != 1))) ||
+      (c.id == 2 && values[1].includes('%'))
+    ) c.errorList.push(
+        'The input contains a percent sign where it is not expected.'
+      );
   }
 
-  validHSL(string: string, notation: number): boolean {
+  checkAllValuesAreNumeric(c: Converter, values: string[]): boolean {
 
-    if (this.hasInvalidStructure(string, 2)) return false;
+    let badOneFound: boolean = false;
+    let ref: string[] = ['first', 'second', 'third', 'fourth'];
 
-    let hsl: number[] = this.inputToNumbers(string);
-    let h: number = hsl[0];
-    let s: number = hsl[1];
-    let l: number = hsl[2];
+    values.forEach((value, i) => {
 
-    if (
-      h < 0 || s < 0 || l < 0 ||
-      (notation == 1 && (h > 360 || s > 100 || l > 100)) ||
-      (notation == 2 && (h > 360 || s > 1 || l > 1)) 
-    ) return false;
+      let vNoPar: string = value.slice().replace(/[\s()]/g, '');
+      let vNoPrcnt: string = value.slice().replace(/[\s\%]/g, '');
+      let vClean: string = value.slice().replace(/[\%\s()]/g, '');
 
-    return true;
+      if (
+        value.slice().split('%').length > 2 ||
+        vNoPar.match(/(\%\d|\%\.)/) ||
+        vNoPrcnt.match(/(\d\(|\.\(|\)\d|\)\.)/) ||
+        !vClean.length || isNaN(Number(vClean))
+      ) {
+        badOneFound = true;
+        c.errorList.push('The ' + ref[i] + ' value does not represent a number.');
+      }
+    });
+
+    return !badOneFound;
   }
 
-  validCMYK(string: string, notation: number): boolean {
+  validateRanges(c: Converter, notation: number, values: number[]): void {
 
-    if (this.hasInvalidStructure(string, 3)) return false;
+    let isValid: boolean[] = [];
+    let ref: string[] = ['first', 'second', 'third', 'fourth'];
 
-    let cmyk: number[] = this.inputToNumbers(string);
-    let c: number = cmyk[0];
-    let m: number = cmyk[1];
-    let y: number = cmyk[2];
-    let k: number = cmyk[3];
+    if (c.id == 1) 
+      isValid = this.validateRangeRGB(c, notation, values);
+    else if (c.id == 2) 
+      isValid = this.validateRangeHSL(c, notation, values);
+    else if (c.id == 3) 
+      isValid = this.validateRangeCMYK(c, notation, values);
 
-    if (
-      c < 0 || m < 0 || y < 0 || k < 0 ||
-      (notation == 1 && (c > 100 || m > 100 || y > 100 || k > 100)) ||
-      (notation == 2 && (c > 1 || m > 1 || y > 1 || k > 1)) 
-    ) return false;
-
-    return true;
+    if (!isValid.includes(true)) 
+      c.errorList.push(
+        'All ' + isValid.length + ' values are out of range of the ' +
+        c.name + ' color space with the selected input format.'
+      );
+    else {
+      isValid.forEach((v, i) => {
+        if (!v) 
+          c.errorList.push(
+            'The ' + ref[i] + ' value is out of range of the ' +
+            c.name + ' color space with the selected input format.'
+          );
+      })
+    }
+    
   }
 
-  validHex(s: string): boolean {
+  validateRangeRGB(c: Converter, notation: number, values: number[]): boolean[] {
 
-    if (
-      !s.match(/^[\dA-Fa-f\s#]+$/) ||
-      !s.slice(1).match(/^[\dA-Fa-f\s]+$/) ||
-      !(s.slice().replace(/[\s#]/g, '').length == 6 ||
-        s.slice().replace(/[\s#]/g, '').length == 3) 
-    ) return false;
+    let output: boolean[] = [];
 
-    return true;
+    values.forEach((v, i) => {
+      output.push(
+        v >= 0 && 
+        ((notation == 1 && v <= 255) || 
+        (notation == 2 && v <= 100) ||
+        (notation == 3 && v <= 1))
+      );
+    });
+
+    return output;
   }
 
-  hasInvalidStructure(s: string, commasAllowed: number): boolean {
+  validateRangeHSL(c: Converter, notation: number, values: number[]): boolean[] {
 
-    if (
-      // Contains anything except digits, spaces, dots, commas, parantheses
-      !s.match(/^[\d\s.,()]+$/) ||
+    let output: boolean[] = [];
 
-      // Too few or too many commas
-      s.split(',').length != commasAllowed + 1 ||
+    output.push(values[0] >= 0 && values[0] <= 360);
+    [values[1], values[2]].forEach((v, i) => {
+      output.push(
+        v >= 0 && ((notation == 1 && v <= 100) || (notation == 2 && v <= 1))
+      );
+    });
 
-      // No digits between commas
-      s.slice().replace(/[\s.()]/g, '').includes(',,') ||
-
-      // Contains more than one dot between commas
-      s.slice().replace(/[\d\s()]/g, '').includes('..') ||
-
-      // Does not start with a digit or dot (ignoring spaces and parantheses)
-      s.slice().replace(/[\s()]/g, '').search(/[\d.]/) != 0 ||
-
-      // Does not end with a digit or dot (ignoring spaces and parantheses)
-      s.slice().replace(/[\s()]/g, '').split('').reverse().join('').search(/[\d.]/) != 0 ||
-
-      // Contains parantheses anywhere in the middle (ignoring spaces)
-      s.slice().replace(/\s/g, '').slice(1, -1).search(/[()]/) >= 0
-
-    ) return true;
-
-    return false;
+    return output;
   }
+
+  validateRangeCMYK(c: Converter, notation: number, values: number[]): boolean[] {
+
+    let output: boolean[] = [];
+
+    values.forEach((v, i) => {
+      output.push(
+        v >= 0 && ((notation == 1 && v <= 100) || (notation == 2 && v <= 1))
+      );
+    });
+
+    return output;
+  }
+
+  validateHex(converter: Converter): void {
+
+    let s: string = converter.userInput;
+    let sNoSpaces: string = s.slice().replace(/[\s]/g, '');
+    let sClean: string = s.slice().replace(/[\s#]/g, '');
+
+    let wrongStructure: boolean = false;
+
+    if (!s.match(/^[\dA-Fa-f\s#]+$/)) {
+      wrongStructure = true;
+      converter.errorList.push('The input contains unexpected symbols.');
+    }
+
+    if (sNoSpaces.slice(1).includes('#')) {
+      wrongStructure = true;
+      converter.errorList.push(
+        'The # symbol can only be present at the beginning of the input.'
+      );
+    }
+
+    if (!wrongStructure && !(sClean.length == 6 || sClean.length == 3))
+      converter.errorList.push(
+        'The length of the input data does not match a valid hexadecimal color format.'
+      );
+  }
+
+
+  /****************************************************************************
+  *
+  *  Valid Input Conversion
+  *
+  ****************************************************************************/
 
   inputToNumbers(s: string): number[] {
-    return s.replace(/[\s()]/g, '').split(',').map(str => Number(str));
+    return s.replace(/[\%\s()]/g, '').split(',').map(str => Number(str));
   }
 
   setColorFromInput(converter: Converter, notation: number): void {
@@ -281,6 +425,5 @@ export class ConverterComponent implements OnInit {
 
     return this.c.default().cmyk;
   }
-
 
 }

@@ -67,6 +67,7 @@ export interface Converter {
   name: string;
   selected: boolean;
   instruction: string;
+  examples: string[];
   inputNotations: {
     id: number;
     name: string;
@@ -75,6 +76,8 @@ export interface Converter {
   userInput: string;
   inputAccepted: boolean;
   inputError: boolean;
-  errorText: string;
+  errorList: string[];
+  inputWarning: boolean;
+  warningList: string[];
   color: Color;
 }
