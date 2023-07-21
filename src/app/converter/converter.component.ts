@@ -127,8 +127,10 @@ export class ConverterComponent implements OnInit {
 
     this.validateUserInput(converter, notation);
 
-    if (converter.inputAccepted) 
+    if (converter.inputAccepted) {
+      converter.inputWarning = converter.warningList.length > 0;
       this.setColorFromInput(converter, notation);
+    }
     else converter.inputError = true;
   }
 
@@ -148,7 +150,10 @@ export class ConverterComponent implements OnInit {
     converter.warningList = [];
 
     if (!converter.userInput) {
-      converter.errorList.push('The input is empty.');
+      converter.errorList.push({
+        text: 'The input is empty.',
+        details: []
+      });
       return;
     }
 
@@ -171,7 +176,7 @@ export class ConverterComponent implements OnInit {
     this.checkPercentSignPlacement(converter, notation, values);
 
     if (numberOfValuesIsValid && this.checkAllValuesAreNumeric(converter, values))
-      this.validateRanges(converter, notation, this.inputToNumbers(s));
+      this.validateRanges(converter, notation, values);
   }
   
   checkNumberOfValues(c: Converter, notation: number, values: string[]): boolean {
@@ -183,11 +188,12 @@ export class ConverterComponent implements OnInit {
     if (c.id == 3) expected = 4;
 
     if (L != expected)
-      c.errorList.push(
-        'The input must contain ' + expected + 
-        ' values separated by ' + (expected - 1) + ' commas. ' + 
-        'Found ' + L + ' value' + (L > 1 ? 's' : '') + ' total.'
-      );
+      c.errorList.push({
+        text: 'The input must contain ' + expected + 
+          ' values separated by ' + (expected - 1) + ' commas. ' + 
+          'Found ' + L + ' value' + (L > 1 ? 's' : '') + ' total.',
+        details: []
+      });
 
     return L == expected;
   }
@@ -197,7 +203,13 @@ export class ConverterComponent implements OnInit {
     // Allowed symbols : digits, percent signs, spaces, dots, commas, parentheses
 
     if (!s.match(/^[\d\%\s.,()]+$/)) 
-      c.errorList.push('The input contains unexpected symbols.');
+      c.errorList.push({
+        text: 'The input contains unexpected symbols.',
+        details: s.slice().split('').map(char => ({
+          fragment: char,
+          valid: /^[\d\%\s.,()]+$/.test(char)
+        }))
+      });
   }
 
   checkParanthesesPlacement(c: Converter, s: string): void {
@@ -205,31 +217,43 @@ export class ConverterComponent implements OnInit {
     // Parentheses cannot be anywhere in the middle (ignoring spaces)
 
     if (s.replace(/\s/g, '').slice(1, -1).search(/[()]/) >= 0)
-      c.errorList.push(
-        'Parantheses can only be present at the beginning or end of the input.'
-      );
+      c.errorList.push({
+        text: 'Parantheses can only be present at the beginning or end of the input.',
+        details: s.slice().trim().split('').map((char, i) => ({
+          fragment: char,
+          valid: !/^[()]+$/.test(char) || !i || i == s.trim().length -1 
+        }))
+      });
   }
 
   checkPercentSignPlacement(c: Converter, notation: number, values: string[]): void {
 
     // Percent sign cannot be in a value that is not expected as a percentage
 
+    let case1: boolean = false, case2: boolean = false;
+
     if (
-      (values.join('').includes('%') && 
-        ((c.id == 1 && notation != 2) || 
-          ((c.id == 2 || c.id == 3) && notation != 1))) ||
-      (c.id == 2 && values[1].includes('%'))
-    ) c.errorList.push(
-        'The input contains a percent sign where it is not expected.'
-      );
+      values.join('').includes('%') && 
+        ((c.id == 1 && notation != 2) || ((c.id == 2 || c.id == 3) && notation != 1))
+    ) case1 = true;
+
+    if (c.id == 2 && values[0].includes('%')) case2 = true;
+
+    if (case1 || case2) 
+      c.errorList.push({
+        text: 'The input contains a percent sign where it is not expected.',
+        details: values.join(',').slice().split('').map((char, i) => ({
+          fragment: char,
+          valid: !/^[\%]+$/.test(char) || (!case1 && case2 && i >= values[0].length)
+        }))
+      });
   }
 
   checkAllValuesAreNumeric(c: Converter, values: string[]): boolean {
 
-    let badOneFound: boolean = false;
-    let ref: string[] = ['first', 'second', 'third', 'fourth'];
+    let isValid: boolean[] = [];
 
-    values.forEach((value, i) => {
+    values.forEach(value => {
 
       let vNoPar: string = value.slice().replace(/[\s()]/g, '');
       let vNoPrcnt: string = value.slice().replace(/[\s\%]/g, '');
@@ -240,17 +264,19 @@ export class ConverterComponent implements OnInit {
         vNoPar.match(/(\%\d|\%\.)/) ||
         vNoPrcnt.match(/(\d\(|\.\(|\)\d|\)\.)/) ||
         !vClean.length || isNaN(Number(vClean))
-      ) {
-        badOneFound = true;
-        c.errorList.push('The ' + ref[i] + ' value does not represent a number.');
-      }
+      ) isValid.push(false);
+      else isValid.push(true);
     });
 
-    return !badOneFound;
+    if (isValid.includes(false)) 
+      this.addErrorForValues(c, isValid, values, 0);
+
+    return !isValid.includes(false);
   }
 
-  validateRanges(c: Converter, notation: number, values: number[]): void {
+  validateRanges(c: Converter, notation: number, valuesStr: string[]): void {
 
+    let values = this.inputToNumbers(valuesStr.join(','));
     let isValid: boolean[] = [];
     let ref: string[] = ['first', 'second', 'third', 'fourth'];
 
@@ -261,21 +287,14 @@ export class ConverterComponent implements OnInit {
     else if (c.id == 3) 
       isValid = this.validateRangeCMYK(c, notation, values);
 
-    if (!isValid.includes(true)) 
-      c.errorList.push(
-        'All ' + isValid.length + ' values are out of range of the ' +
-        c.name + ' color space with the selected input format.'
-      );
+    if (isValid.includes(false)) 
+      this.addErrorForValues(c, isValid, valuesStr, 1);
     else {
-      isValid.forEach((v, i) => {
-        if (!v) 
-          c.errorList.push(
-            'The ' + ref[i] + ' value is out of range of the ' +
-            c.name + ' color space with the selected input format.'
-          );
-      })
+      if (
+        (c.id == 1 && notation != 3) || 
+        ((c.id == 2 || c.id == 3) && notation != 2)
+      ) this.checkValuesForWarnings(c, values, valuesStr);
     }
-    
   }
 
   validateRangeRGB(c: Converter, notation: number, values: number[]): boolean[] {
@@ -321,6 +340,117 @@ export class ConverterComponent implements OnInit {
     return output;
   }
 
+  addErrorForValues(c: Converter, isValid: boolean[], values: string[], type: number) {
+
+    let ref: string[] = ['first', 'second', 'third', 'fourth'];
+
+    let detailsArray: string[] = [];
+    values.forEach((v, index) => {
+      detailsArray.push(v);
+      if (index != values.length - 1) detailsArray.push(',');
+    });
+
+    let badInd: number[] = [];
+    isValid.forEach((e, i) => { 
+      if(!e) badInd.push(i);
+    });
+
+    let errorText: string = '';
+    let errorEndSingle: string[] = [
+      ' does not represent a number.',
+      ' is out of range of the ' +
+        c.name + ' color space with the selected input format.'
+    ];
+    let errorEndPlural: string[] = [
+      ' do not represent a number.',
+      ' are out of range of the ' +
+        c.name + ' color space with the selected input format.'
+    ];
+
+    switch (badInd.length) {
+      case 1:
+        errorText = 'The ' + ref[badInd[0]] + ' value' + errorEndSingle[type];
+        break;
+      case 2:
+        errorText = 'The ' + ref[badInd[0]] + ' and ' + ref[badInd[1]] + 
+          ' values' + errorEndPlural[type];
+        break;
+      case 3:
+        errorText = 
+          isValid.length == 3 ? 'All three values' + errorEndPlural[type] :
+            'The ' + ref[badInd[0]] + ', ' + ref[badInd[1]] + 
+            ', and ' + ref[badInd[2]] + ' values' + errorEndPlural[type]
+        break;
+      case 4:
+        errorText = 'All four values' + errorEndPlural[type];
+        break;
+    }
+
+    c.errorList.push({
+      text: errorText,
+      details: detailsArray.map((v, index) => ({
+        fragment: v,
+        valid: !badInd.map(ind => 2 * ind).includes(index)
+      }))
+    });
+  }
+
+  checkValuesForWarnings(c: Converter, values: number[], valuesStr: string[]) {
+
+    let isStrange: boolean[] = [];
+
+    values.forEach(value => {
+      isStrange.push(value > 0 && value < 1);
+    });
+
+    if (isStrange.includes(true)) {
+
+      let ref: string[] = ['first', 'second', 'third', 'fourth'];
+
+      let badInd: number[] = [];
+      isStrange.forEach((e, i) => { 
+        if(e) badInd.push(i);
+      });
+
+      let detailsArray: string[] = [];
+      valuesStr.forEach((v, index) => {
+        detailsArray.push(v);
+        if (index != values.length - 1) detailsArray.push(',');
+      });
+
+      let warningText: string = '';
+      let warningEnd: string = ' smaller than 1. ' + 
+        'Make sure the input is spelled correctly and the proper format is selected.';
+
+      switch (badInd.length) {
+        case 1:
+          warningText = 'The ' + ref[badInd[0]] + ' value is' + warningEnd;
+          break;
+        case 2:
+          warningText = 'The ' + ref[badInd[0]] + ' and ' + ref[badInd[1]] + 
+            ' values are' + warningEnd;
+          break;
+        case 3:
+          warningText = 
+            isStrange.length == 3 ? 'All three values are' + warningEnd :
+              'The ' + ref[badInd[0]] + ', ' + ref[badInd[1]] + 
+              ', and ' + ref[badInd[2]] + ' values are' + warningEnd
+          break;
+        case 4:
+          warningText = 'All four values are' + warningEnd;
+          break;
+      }
+
+      c.warningList.push({
+        text: warningText,
+        details: detailsArray.map((v, index) => ({
+          fragment: v,
+          valid: !badInd.map(ind => 2 * ind).includes(index)
+        }))
+      });
+    }
+  }
+
   validateHex(converter: Converter): void {
 
     let s: string = converter.userInput;
@@ -331,20 +461,31 @@ export class ConverterComponent implements OnInit {
 
     if (!s.match(/^[\dA-Fa-f\s#]+$/)) {
       wrongStructure = true;
-      converter.errorList.push('The input contains unexpected symbols.');
+      converter.errorList.push({
+        text: 'The input contains unexpected symbols.',
+        details: s.slice().split('').map(char => ({
+          fragment: char,
+          valid: /^[\dA-Fa-f\s#]+$/.test(char)
+        }))
+      });
     }
 
     if (sNoSpaces.slice(1).includes('#')) {
       wrongStructure = true;
-      converter.errorList.push(
-        'The # symbol can only be present at the beginning of the input.'
-      );
+      converter.errorList.push({
+        text: 'The # symbol can only be present at the beginning of the input.',
+        details: s.slice().trim().split('').map((char, i) => ({
+          fragment: char,
+          valid: !/^[#]+$/.test(char) || !i
+        }))
+      });
     }
 
     if (!wrongStructure && !(sClean.length == 6 || sClean.length == 3))
-      converter.errorList.push(
-        'The length of the input data does not match a valid hexadecimal color format.'
-      );
+      converter.errorList.push({
+        text: 'The length of the input data does not match a valid hexadecimal color format.',
+        details: []
+      });
   }
 
 

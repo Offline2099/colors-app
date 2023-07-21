@@ -49,27 +49,31 @@
       (click)="runConverter(c)">Convert</div>
   </div>
 
-  <!-- Errors -->
-  <div 
-    *ngIf="c.inputError"
-    class="error-container">
+  <!-- Errors and Warnings -->
+  <ng-container *ngFor="let list of [c.errorList, c.warningList]; index as j">
     <div 
-      *ngFor="let error of c.errorList"
-      class="input-error-text"
-      [ngClass]="{'single-error': c.errorList.length == 1}">
-      <span class="input-error-symbol">&#9888;</span>
-      <span>{{error}}</span>
-    </div> 
-  </div>
-
-  <!-- Warnings -->
-  <div 
-    *ngIf="c.inputWarning"
-    class="warning-container">
-    <div 
-      *ngFor="let warning of c.warningList"
-      class="input-warning-text">{{warning}}</div> 
-  </div>
+      *ngIf="j ? c.inputWarning : c.inputError"
+      class="input-issues-container input-{{j ? 'warnings' : 'errors'}}">
+      <div 
+        *ngFor="let issue of list"
+        class="input-issue"
+        [ngClass]="{'single-issue': list.length == 1 && !list[0].details.length}">
+        <div class="input-issue-symbol">&#9888;</div>
+        <div class="input-issue-data">
+          <div class="input-issue-text">{{issue.text}}</div>
+          <div 
+            *ngIf="issue.details.length"
+            class="input-issue-details">
+            <div class="fragments-container">
+              <span 
+              *ngFor="let fragment of issue.details"
+              [ngClass]="{'fragment-invalid': !fragment.valid}">{{fragment.fragment}}</span>
+            </div>
+          </div>
+        </div>
+      </div> 
+    </div>
+  </ng-container>
 
   <!-- Output -->
   <app-output-color

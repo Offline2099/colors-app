@@ -124,35 +124,104 @@ input[type=text]:focus {
 
 /*   Errors   */
 
-.error-container {
+.input-issues-container {
   display: flex;
   flex-wrap: wrap;
   width: min(800px, 100%);
   margin: 0 auto;
   padding: 10px;
   border-radius: 10px;
-  background: rgba(48, 0, 0, .3);
   animation: none;
 }
 
-.input-error-text {
+.input-issues-container.input-errors {
+  background: rgba(48, 0, 0, .3);
+}
+
+.input-issues-container.input-warnings {
+  background: rgba(190, 190, 0, .1);
+}
+
+.input-issue {
   display: flex;
   flex-basis: 100%;
   align-items: center;
   margin: 0 auto;
   padding: 5px 10px;
-  color: darkred;
+  border-bottom: 1px dotted;
   text-align: center;
   font-size: 17px;
   letter-spacing: .01em;
   animation: fadeIn .5s;
 }
 
-.input-error-text.single-error {
+.input-issue:first-of-type {
+  padding-top: 0;
+}
+
+.input-issue:last-of-type {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.input-issue.single-issue {
   justify-content: center;
 }
 
-.input-error-symbol {
-  margin-right: 20px;
+.input-issues-container.input-errors .input-issue {
+  color: darkred;
+  border-color: #881111;
+}
+
+.input-issues-container.input-warnings .input-issue {
+  color: #787800;
+  border-color: #5A5A00;
+}
+
+.input-issue-symbol {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 25px 0 10px;
   font-size: 22px;
+}
+
+.input-issue-data {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  gap: 8px;
+}
+
+.input-issue-text {
+  display: flex;
+  text-align: left;
+  padding-top: 2px;
+}
+
+.input-issue-details {
+  display: flex;
+  padding-left: 5px;
+}
+
+.fragments-container {
+  margin-bottom: 5px;
+  padding: 4px 12px;
+  border-radius: 6px;
+  background: #222;
+  color: #777;
+  font-size: 18px;
+  font-family: 'Inconsolata', monospace;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+.input-issues-container.input-errors .fragment-invalid {
+  color: #CC3333;
+  background: rgba(255, 0, 0, .1);
+}
+
+.input-issues-container.input-warnings .fragment-invalid {
+  color: #787800;
+  background: rgba(255, 255, 0, .05);
 }

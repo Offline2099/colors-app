@@ -62,6 +62,14 @@ export interface TextOutputBlock {
   }[]
 }
 
+export interface InputIssue {
+  text: string;
+  details: {
+    fragment: string;
+    valid: boolean;
+  }[];
+}
+
 export interface Converter {
   id: number;
   name: string;
@@ -76,8 +84,8 @@ export interface Converter {
   userInput: string;
   inputAccepted: boolean;
   inputError: boolean;
-  errorList: string[];
+  errorList: InputIssue[];
   inputWarning: boolean;
-  warningList: string[];
+  warningList: InputIssue[];
   color: Color;
 }
