@@ -23,14 +23,18 @@ export class RangeInputComponent implements OnInit, DoCheck {
   currentValue: string = '';
 
   ngOnInit(): void {
-    this.type255 = (this.range.min == 0 && this.range.max == 255);
-    this.type360 = (this.range.min == 0 && this.range.max == 360);
-    this.typePercentage = this.range.type == 'percentage';
-    this.typeDegree = this.range.type == 'degree';
+    this.setAppearanceType();
   }
 
   ngDoCheck(): void {
     this.currentValue = this.range.value.toFixed(0);
+  }
+
+  setAppearanceType(): void {
+    this.type255 = (this.range.min == 0 && this.range.max == 255);
+    this.type360 = (this.range.min == 0 && this.range.max == 360);
+    this.typePercentage = this.range.type == 'percentage';
+    this.typeDegree = this.range.type == 'degree';
   }
 
   sendChanges(e: Event): void {

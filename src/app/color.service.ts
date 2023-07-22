@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { 
-  Color, ColorRGB, ColorHSL, ColorCMYK, ColorSpace} from './interfaces';
+import { Color, ColorRGB, ColorHSL, ColorCMYK, ColorSpace} from './interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -11,10 +10,10 @@ export class ColorService {
   constructor() { }
 
   private defaultColor: Color = {
-    rgb: {r: 25, g: 90, b: 25},
-    hsl: {h: 120, s: .57, l: .23},
-    cmyk: {c: .72, m: 0, y: .72, k: .65},
-    hex: '#195A19'
+    rgb: {r: 56, g: 77, b: 105},
+    hsl: {h: 214, s: .304, l: .316},
+    cmyk: {c: .6, m: .45, y: .25, k: .45},
+    hex: '#384D69'
   }
 
   private colorSpaces: ColorSpace[] = [
@@ -49,15 +48,17 @@ export class ColorService {
   ];
 
   default(): Color {
-    return this.defaultColor;
+    return JSON.parse(JSON.stringify(this.defaultColor));
   }
 
   spaces(): ColorSpace[] {
-    return this.colorSpaces;
+    return JSON.parse(JSON.stringify(this.colorSpaces));
   }
 
   space(name: string): ColorSpace | undefined {
-    return this.colorSpaces.find(space => space.name == name);
+    return JSON.parse(JSON.stringify(
+      this.colorSpaces.find(space => space.name == name)
+    ));
   }
 
   setColorFromRGB(input: ColorRGB): Color {
@@ -268,14 +269,14 @@ export class ColorService {
     }
   }
 
-  colorStr(c: Color, space: string, notation: string, includePercent?: boolean): string[] {
+  colorStr(c: Color, space: string, notation: string, inclPercent?: boolean): string[] {
 
     let str: string[] = [];
 
     let round = (n: number): string => {return Math.abs(n).toFixed(0)};
     let arith = (n: number): string => {return Math.abs(n).toFixed(3)};
     let prcnt = (n: number): string => {
-      return Math.abs(100 * n).toFixed(0) + (includePercent ? '%' : '')
+      return Math.abs(100 * n).toFixed(0) + (inclPercent ? '%' : '')
     };
 
     switch(space) {
@@ -291,7 +292,7 @@ export class ColorService {
             str = [prcnt(c.rgb.r / 255), prcnt(c.rgb.g / 255), prcnt(c.rgb.b / 255)];
             break;
           case 'Hexadecimal':
-            str = ['#'].concat(this.RGBtoHex(c.rgb).substring(1).match(/.{2}/g) as Array<string>);
+            str = ['#'].concat(this.RGBtoHex(c.rgb).slice(1).match(/.{2}/g) as string[]);
             break;
         }
         break;

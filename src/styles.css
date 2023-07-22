@@ -14,12 +14,12 @@ body {
   font-weight: 400;
 }
 
-@keyframes fadeIn {
-  0% {opacity: 0;}
-  100% {opacity: 1;}
+::selection {
+  background: #384D69;
+  color: #ddd;
 }
 
-@keyframes fadeIn2 {
+@keyframes fadeIn {
   0% {opacity: 0;}
   100% {opacity: 1;}
 }

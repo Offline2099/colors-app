@@ -1,16 +1,17 @@
 
 :host  {
   display: flex;
-  flex-basis: 45%;
   flex-wrap: wrap;
   gap: 10px;
   max-width: 580px;
-  margin: 5px 10px;
-  padding: 10px;
+  padding: 8px 10px 10px 10px;
   border-radius: 10px;
   background: linear-gradient(#181818, #141414);
   box-shadow: 0 0 2px 2px #1c1c1c inset;
 }
+
+
+/*   Header   */
 
 .range-inputs-block-header {
   display: flex;
@@ -21,7 +22,28 @@
   border-bottom: 2px solid #444;
   font-size: 22px;
   letter-spacing: 0.02em;
+  user-select: none;
 }
+
+@media (max-width: 899px) {
+  :host  {
+    padding-top: 5px;
+  }
+  .range-inputs-block-header {
+    font-size: 20px;
+    margin-bottom: 2px;
+  }
+}
+
+@media (max-width: 599px) {
+  .range-inputs-block-header {
+    font-size: 18px;
+    margin-bottom: 0;
+  }
+}
+
+
+/*   Output Color Sample   */
 
 .color-sample {
   display: flex;

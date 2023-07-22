@@ -12,7 +12,7 @@ export class AppComponent implements OnInit {
   topLevelOptions: MenuOption[] = [];
 
   topLevelOptionsText: string[] = 
-    ['Slider Input', 'Text Input', 'Learn'];
+    ['Slider Input', 'Text Input', 'Info'];
 
   ngOnInit() {
     this.constructTopLevelBlocks();
@@ -23,7 +23,7 @@ export class AppComponent implements OnInit {
       this.topLevelOptions.push({
         id: i,
         optionText: t,
-        selected: i == 2
+        selected: !i
       });
     });
   }

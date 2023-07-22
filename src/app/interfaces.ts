@@ -59,7 +59,7 @@ export interface TextOutputBlock {
   notations: {
     name: string;
     values: string[];
-  }[]
+  }[];
 }
 
 export interface InputIssue {

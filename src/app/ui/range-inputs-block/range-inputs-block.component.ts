@@ -8,29 +8,26 @@ import { ColorService } from '../../color.service';
   templateUrl: './range-inputs-block.component.html',
   styleUrls: ['./range-inputs-block.component.css']
 })
-export class RangeInputsBlockComponent implements OnInit {
+export class RangeInputsBlockComponent implements OnInit, DoCheck {
 
   constructor(private c: ColorService) { }
   
-  @Input() space: ColorSpace = {name: '', ranges: [], notations: []};
+  @Input() space!: ColorSpace;
   @Input() forcedColor?: Color;
   @Input() displaySample?: boolean = true;
 
   @Output() output = new EventEmitter<Color>();
 
-  block: InputRangeBlock = {name: '', ranges: []};
+  block!: InputRangeBlock;
   color: Color = this.c.default();
 
   ngOnInit(): void {
     this.constructBlock();
-    this.updateRanges();
   }
 
   ngDoCheck(): void {
-    if (this.forcedColor) {
-      this.color = this.forcedColor;
-      this.updateRanges();
-    }
+    if (this.forcedColor) this.color = this.forcedColor;
+    this.updateRanges();
   }
 
   constructBlock(): void {
@@ -66,7 +63,6 @@ export class RangeInputsBlockComponent implements OnInit {
     this.color = this.c.changeColorComponent(
       this.color, range.id, this.adjustOutputForType(range.type, value)
     );
-    this.updateRanges();
     this.output.emit(this.color);
   }
 

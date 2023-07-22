@@ -17,16 +17,16 @@
     <div class="instruction-text">{{c.instruction}}</div>    
   </div>
 
-  <!-- Input Notations -->
+  <!-- Input Notations Menu -->
   <app-choose-one
     *ngIf="notationsMenu[i].length"
     [menu]="notationsMenu[i]"
     menuStyle="inline-menu"
-    label="Use input format:"
+    label="Use input format&hairsp;:"
     (selectOption)="switchNotation(c, $event)">
   </app-choose-one>
 
-  <!-- Examples -->
+  <!-- Input Examples -->
   <div class="example-container">
     <div class="example-text">
       <span class="example-text-label">Example: </span>
@@ -40,13 +40,15 @@
 
   <!-- Input -->
   <div class="text-input-container">
-    <input 
-      type="text" value="" maxlength="30" 
-      (input)="updUserInput(c, $event)"
-      (change)="runConverter(c)"/>
-    <div 
-      class="convert-button"
-      (click)="runConverter(c)">Convert</div>
+    <div class="text-input-block">
+      <input 
+        type="text" value="" maxlength="30" 
+        (input)="updUserInput(c, $event)"
+        (change)="runConverter(c)"/>
+      <div 
+        class="convert-button"
+        (click)="runConverter(c)">Convert</div>
+    </div>
   </div>
 
   <!-- Errors and Warnings -->

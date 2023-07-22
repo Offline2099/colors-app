@@ -1,11 +1,17 @@
 
 :host {
   display: flex;
-  flex-basis: 100%;
   flex-wrap: wrap;
+  flex-basis: 100%;
+  height: 100%;
   align-content: flex-start;
   justify-content: center;
-  height: 100%;
+}
+
+@media (max-width: 599px) {
+  :host {
+    padding: 0 8px;
+  }
 }
 
 
@@ -16,9 +22,10 @@
   flex-wrap: wrap;
   flex-basis: 100%;
   align-content: flex-start;
-  height: calc(100% - 90px);
-  margin: 0 20px;
-  padding: 10px 0;
+  justify-content: center;
+  min-height: calc(100% - 90px);
+  margin: 0 20px 20px 20px;
+  padding: 10px 10px 20px 10px;
   border-radius: 10px;
   background: rgba(34, 34, 34, .5);
   box-shadow: 
@@ -34,6 +41,21 @@
   display: flex;
 }
 
+@media (max-width: 899px) {
+  .converter-block {
+    margin: 0 10px 15px 10px;
+    border-radius: 8px;
+  }
+}
+
+@media (max-width: 599px) {
+  .converter-block {
+    margin: 0 0 10px 0;
+    padding: 10px 5px 20px 5px;
+    border-radius: 6px;
+  }
+}
+
 
 /*   Instruction   */
 
@@ -46,11 +68,23 @@
 .instruction-text {
   display: flex;
   max-width: 1000px;
-  margin: 0 auto;
   padding: 10px;
   text-align: center;
   font-size: 17px;
-  letter-spacing: .01em;
+  letter-spacing: .015em;
+}
+
+@media (max-width: 899px) {
+  .instruction-text {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 599px) {
+  .instruction-text {
+    padding: 5px 10px;
+    font-size: 14px;
+  }
 }
 
 
@@ -66,25 +100,43 @@
   display: flex;
   align-items: center;
   max-width: 1000px;
-  margin: 0 auto;
-  padding: 10px;
+  padding: 10px 0;
   text-align: center;
-  letter-spacing: .01em;
-  animation: fadeIn .5s;
 }
 
 .example-text-label {
   margin-right: 20px;
   padding-bottom: 2px;
+  letter-spacing: .015em;
+  user-select: none;
 }
 
 .example-string {
   padding: 5px 10px;
   background: #282828;
   border-radius: 4px;
+  color: #9a9a9a;
   font-family: 'Inconsolata', monospace;
   font-weight: 500;
   letter-spacing: 0.02em;
+}
+
+@media (max-width: 899px) {
+  .example-text-label,
+  .example-string {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 599px) {
+  .example-text-label {
+    margin-right: 10px;
+    padding-bottom: 3px;
+  }
+  .example-string {
+    padding: 4px 8px;
+    font-size: 14px;
+  }
 }
 
 
@@ -94,10 +146,17 @@
   display: flex;
   flex-basis: 100%;
   justify-content: center;
-  margin: 20px 0;
+  margin: 15px 5px 20px 5px;
+}
+
+.text-input-block {
+  display: inline-flex;
+  border-radius: 6px;
+  box-shadow: 0 0 1px 1px #1a1a1a;
 }
 
 input[type=text] {
+  display: flex;
   width: 400px;
   padding: 10px 15px;
   border: none;
@@ -113,22 +172,60 @@ input[type=text]:focus {
 }
 
 .convert-button {
+  display: flex;
   padding: 10px 15px;
+  border-left: 1px solid #282828;
   border-radius: 0 6px 6px 0;
-  font-size: 16px;
+  background: #282828;
   letter-spacing: .03em;
-  background: #222;
+  user-select: none;
   cursor: pointer;
+  transition: .3s;
+}
+
+@media (hover: hover) {
+  .convert-button:hover {
+    background: #2c2c2c;
+  }
+}
+
+@media (max-width: 899px) {
+  .text-input-container {
+    margin: 10px 5px;
+  }
+  input[type=text] {
+    font-size: 15px;
+    padding: 8px 10px;
+  }
+  .convert-button {
+    font-size: 15px;
+    padding: 8px 10px;
+  }
+}
+
+@media (max-width: 599px) {
+  .text-input-block {
+    width: 100%;
+  }
+  input[type=text] {
+    width: unset;
+    flex-grow: 1;
+    font-size: 14px;
+  }
+  .convert-button {
+    font-size: 14px;
+  }
 }
 
 
-/*   Errors   */
+/*   Errors and Warnings   */
 
 .input-issues-container {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   width: min(800px, 100%);
-  margin: 0 auto;
+  margin: 0 5px 10px 5px;
   padding: 10px;
   border-radius: 10px;
   animation: none;
@@ -146,12 +243,9 @@ input[type=text]:focus {
   display: flex;
   flex-basis: 100%;
   align-items: center;
-  margin: 0 auto;
   padding: 5px 10px;
   border-bottom: 1px dotted;
-  text-align: center;
-  font-size: 17px;
-  letter-spacing: .01em;
+  letter-spacing: .015em;
   animation: fadeIn .5s;
 }
 
@@ -197,6 +291,7 @@ input[type=text]:focus {
   display: flex;
   text-align: left;
   padding-top: 2px;
+  font-size: 17px;
 }
 
 .input-issue-details {
@@ -206,11 +301,10 @@ input[type=text]:focus {
 
 .fragments-container {
   margin-bottom: 5px;
-  padding: 4px 12px;
-  border-radius: 6px;
+  padding: 5px 10px;
+  border-radius: 4px;
   background: #222;
   color: #777;
-  font-size: 18px;
   font-family: 'Inconsolata', monospace;
   font-weight: 500;
   letter-spacing: 0.04em;
@@ -224,4 +318,29 @@ input[type=text]:focus {
 .input-issues-container.input-warnings .fragment-invalid {
   color: #787800;
   background: rgba(255, 255, 0, .05);
+}
+
+@media (max-width: 899px) {
+  .input-issues-container {
+    margin: 0 5px 8px 5px;
+    padding: 8px 5px;
+    border-radius: 6px;
+  }
+  .input-issue-text,
+  .fragments-container {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 599px) {
+  .input-issue-symbol {
+    display: none;
+  }
+  .input-issue-text {
+    font-size: 14px;
+  }
+  .fragments-container {
+    padding: 5px 8px;
+    font-size: 14px;
+  }
 }
