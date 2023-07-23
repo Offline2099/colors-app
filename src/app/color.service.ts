@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Color, ColorRGB, ColorHSL, ColorCMYK, ColorSpace} from './interfaces';
+import { Color, ColorRGB, ColorHSL, ColorCMYK, ColorSpace } from './interfaces';
 
 @Injectable({
   providedIn: 'root'
