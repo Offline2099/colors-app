@@ -163,7 +163,7 @@ export class ConverterComponent implements OnInit {
     converter.inputWarning = false;
     converter.warningList = [];
 
-    this.addIfError(converter, this.iv.isEmpty(converter.userInput));
+    this.addIfError(converter, this.iv.checkIfEmpty(converter.userInput));
     if (converter.errorList.length) return;
 
     if (converter.id != 4) this.validateCSV(converter, notation);

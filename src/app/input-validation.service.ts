@@ -13,11 +13,13 @@ export class InputValidationService {
     if (error) list.push(error);
   }
 
-  isEmpty(s: string): InputIssue | null {
+  checkIfEmpty(s: string): InputIssue | null {
+
     if (!s) return {
       text: 'The input is empty.',
       details: []
     }
+
     return null;
   }
 
@@ -25,40 +27,56 @@ export class InputValidationService {
 
     let errorList: InputIssue[] = [];
 
-    let sNoSpaces: string = s.slice().replace(/[\s]/g, '');
-    let sClean: string = s.slice().replace(/[\s#]/g, '');
+    this.addIfError(errorList, this.checkUnexpectedSymbolsHex(s));
+    this.addIfError(errorList, this.checkHashSignPlacement(s));
 
-    let wrongStructure: boolean = false;
+    if (!errorList.length)
+      this.addIfError(errorList, this.checkInputLengthHex(s));
+
+    return errorList;
+  }
+
+  checkUnexpectedSymbolsHex(s: string): InputIssue | null {
 
     if (!s.match(/^[\dA-Fa-f\s#]+$/)) {
-      wrongStructure = true;
-      errorList.push({
+      return {
         text: 'The input contains unexpected symbols.',
         details: s.slice().split('').map(char => ({
           fragment: char,
           valid: /^[\dA-Fa-f\s#]+$/.test(char)
         }))
-      });
+      };
     }
 
-    if (sNoSpaces.slice(1).includes('#')) {
-      wrongStructure = true;
-      errorList.push({
+    return null;
+  }
+
+  checkHashSignPlacement(s: string): InputIssue | null {
+
+    if (s.slice().replace(/[\s]/g, '').slice(1).includes('#')) {
+      return {
         text: 'The # symbol can only be present at the beginning of the input.',
         details: s.slice().trim().split('').map((char, i) => ({
           fragment: char,
           valid: !/^[#]+$/.test(char) || !i
         }))
-      });
+      };
     }
 
-    if (!wrongStructure && !(sClean.length == 6 || sClean.length == 3))
-      errorList.push({
+    return null;
+  }
+
+  checkInputLengthHex(s: string): InputIssue | null {
+
+    let length: number = s.slice().replace(/[\s#]/g, '').length;
+
+    if (length != 6 && length != 3)
+      return {
         text: 'The length of the input data does not match a valid hexadecimal color format.',
         details: []
-      });
+      };
 
-    return errorList;
+    return null;
   }
 
   validateColorStringCSV(space: number, notation: number, s: string): InputIssue[] {
@@ -67,7 +85,7 @@ export class InputValidationService {
     let values: string[] = s.split(',');
 
     this.addIfError(errorList, this.checkNumberOfValues(space, notation, values));
-    this.addIfError(errorList, this.checkUnexpectedSymbols(s));
+    this.addIfError(errorList, this.checkUnexpectedSymbolsCSV(s));
     this.addIfError(errorList, this.checkParanthesesPlacement(s));
 
     if (!errorList.length) {
@@ -94,7 +112,7 @@ export class InputValidationService {
     return null;
   }
 
-  checkUnexpectedSymbols(s: string): InputIssue | null {
+  checkUnexpectedSymbolsCSV(s: string): InputIssue | null {
 
     // Allowed symbols : digits, percent signs, spaces, dots, commas, parentheses
 
@@ -111,8 +129,6 @@ export class InputValidationService {
   }
 
   checkParanthesesPlacement(s: string): InputIssue | null {
-
-    // Parentheses cannot be anywhere in the middle (ignoring spaces)
 
     if (s.replace(/\s/g, '').slice(1, -1).search(/[()]/) >= 0)
       return {
@@ -248,6 +264,11 @@ export class InputValidationService {
   }
 
   constructIssueForValues(isValid: boolean[], values: string[], type: number): InputIssue {
+
+    // Types accepted by this function:
+    //    -1   : input warning (found strange values)
+    //     0   : found non-numeric values
+    //  1 to 3 : found values out of range for the color space, where the number is the space id
 
     let space = (n: number): string => {
       if (n < 1) return '';

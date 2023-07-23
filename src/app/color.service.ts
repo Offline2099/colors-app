@@ -271,8 +271,6 @@ export class ColorService {
 
   colorStr(c: Color, space: string, notation: string, inclPercent?: boolean): string[] {
 
-    let str: string[] = [];
-
     let round = (n: number): string => {return Math.abs(n).toFixed(0)};
     let arith = (n: number): string => {return Math.abs(n).toFixed(3)};
     let prcnt = (n: number): string => {
@@ -283,42 +281,33 @@ export class ColorService {
       case 'RGB':
         switch(notation) {
           case 'Decimal':
-            str = [round(c.rgb.r), round(c.rgb.g), round(c.rgb.b)];
-            break;
+            return [round(c.rgb.r), round(c.rgb.g), round(c.rgb.b)];
           case 'Arithmetic':
-            str = [arith(c.rgb.r / 255), arith(c.rgb.g / 255), arith(c.rgb.b / 255)];
-            break;
+            return [arith(c.rgb.r / 255), arith(c.rgb.g / 255), arith(c.rgb.b / 255)];
           case 'Percentages':
-            str = [prcnt(c.rgb.r / 255), prcnt(c.rgb.g / 255), prcnt(c.rgb.b / 255)];
-            break;
+            return [prcnt(c.rgb.r / 255), prcnt(c.rgb.g / 255), prcnt(c.rgb.b / 255)];
           case 'Hexadecimal':
-            str = ['#'].concat(this.RGBtoHex(c.rgb).slice(1).match(/.{2}/g) as string[]);
-            break;
+            return ['#'].concat(this.RGBtoHex(c.rgb).slice(1).match(/.{2}/g) as string[]);
         }
         break;
       case 'HSL':
         switch(notation) {
           case 'Arithmetic':
-            str = [round(c.hsl.h), arith(c.hsl.s), arith(c.hsl.l)];
-            break;
+            return [round(c.hsl.h), arith(c.hsl.s), arith(c.hsl.l)];
           case 'Percentages':
-            str = [round(c.hsl.h), prcnt(c.hsl.s), prcnt(c.hsl.l)];
-            break;
+            return [round(c.hsl.h), prcnt(c.hsl.s), prcnt(c.hsl.l)];
         }
         break;
       case 'CMYK':
         switch(notation) {
           case 'Arithmetic':
-            str = [arith(c.cmyk.c), arith(c.cmyk.m), arith(c.cmyk.y), arith(c.cmyk.k)];
-            break;
+            return [arith(c.cmyk.c), arith(c.cmyk.m), arith(c.cmyk.y), arith(c.cmyk.k)];
           case 'Percentages':
-            str = [prcnt(c.cmyk.c), prcnt(c.cmyk.m), prcnt(c.cmyk.y), prcnt(c.cmyk.k)];
-            break;
+            return [prcnt(c.cmyk.c), prcnt(c.cmyk.m), prcnt(c.cmyk.y), prcnt(c.cmyk.k)];
         }
-        break;
     }
 
-    return str;
+    return [];
   }
 
 }
