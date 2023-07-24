@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, DoCheck, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, DoCheck, HostBinding, Output, EventEmitter } from '@angular/core';
 
 import { Color, ColorSpace, InputRange, InputRangeBlock } from '../../interfaces';
 import { ColorService } from '../../color.service';
@@ -16,6 +16,9 @@ export class RangeInputsBlockComponent implements OnInit, DoCheck {
   @Input() forcedColor?: Color;
   @Input() displaySample?: boolean = true;
 
+  @HostBinding('class.block-collapsed') collapsed: boolean = false;
+  @HostBinding('class.sample-displayed') _displaySample: boolean = false;
+
   @Output() output = new EventEmitter<Color>();
 
   block!: InputRangeBlock;
@@ -23,6 +26,7 @@ export class RangeInputsBlockComponent implements OnInit, DoCheck {
 
   ngOnInit(): void {
     this.constructBlock();
+    if (this.displaySample) this._displaySample = this.displaySample;
   }
 
   ngDoCheck(): void {
@@ -64,6 +68,10 @@ export class RangeInputsBlockComponent implements OnInit, DoCheck {
       this.color, range.id, this.adjustOutputForType(range.type, value)
     );
     this.output.emit(this.color);
+  }
+
+  toggleBlock(): void {
+    this.collapsed = !this.collapsed;
   }
 
 }

@@ -71,7 +71,7 @@
   gap: 15px;
   align-items: flex-start;
   justify-content: center;
-  margin-bottom: 20px;
+  margin: 0 8px 20px 8px;
 }
 
 @media (max-width: 899px) {
@@ -83,5 +83,6 @@
 @media (max-width: 599px) {
   .range-inputs-container {
     gap: 6px;
+    margin: 0 0 15px 0;
   }
 }

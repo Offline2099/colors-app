@@ -3,17 +3,43 @@
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  max-width: 580px;
+  width: min(100%, 580px);
   padding: 8px 10px 10px 10px;
   border-radius: 10px;
   background: linear-gradient(#181818, #141414);
   box-shadow: 0 0 2px 2px #1c1c1c inset;
+  overflow: hidden;
+  transition: .4s;
+}
+
+@media (max-width: 899px) {
+  :host  {
+    padding-top: 5px;
+    max-height: 350px;
+  }
+  :host.sample-displayed {
+    max-height: 500px;
+  }
+  :host.block-collapsed {
+    max-height: 25px;
+    box-shadow: 0 0 2px 2px #222 inset, 0 0 25px 25px #1c1c1c inset;
+  }
+}
+
+@media (max-width: 599px) {
+  :host.sample-displayed {
+    max-height: 420px;
+  }
+  :host.block-collapsed {
+    max-height: 22px;
+  }
 }
 
 
 /*   Header   */
 
 .range-inputs-block-header {
+  position: relative;
   display: flex;
   flex-basis: 100%;
   justify-content: center;
@@ -23,15 +49,44 @@
   font-size: 22px;
   letter-spacing: 0.02em;
   user-select: none;
+  transition: .4s;
+}
+
+:host.block-collapsed .range-inputs-block-header {
+  padding-bottom: 0;
+  border-color: transparent;
+}
+
+.range-inputs-block-toggler {
+  position: absolute;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  top: 4px;
+  right: 10px;
+  width: 30px;
+  height: 22px;
+  color: #888;
+  cursor: pointer;
+}
+
+.range-inputs-block-toggler-triangle {
+  transform: rotateX(0deg);
+  transition: .3s;
+}
+
+:host.block-collapsed .range-inputs-block-toggler-triangle {
+  transform: rotateX(180deg);
 }
 
 @media (max-width: 899px) {
-  :host  {
-    padding-top: 5px;
-  }
   .range-inputs-block-header {
     font-size: 20px;
     margin-bottom: 2px;
+  }
+  .range-inputs-block-toggler {
+    display: flex;
+    font-size: 16px;
   }
 }
 
@@ -39,6 +94,10 @@
   .range-inputs-block-header {
     font-size: 18px;
     margin-bottom: 0;
+  }
+  .range-inputs-block-toggler {
+    top: 2px;
+    font-size: 14px;
   }
 }
 
@@ -49,4 +108,18 @@
   display: flex;
   flex-basis: 100%;
   height: 200px;
+  border-radius: 6px;
+  box-shadow: 0 0 2px 2px #222 inset;
+}
+
+@media (max-width: 899px) {
+  .color-sample {
+    height: 150px;
+  }
+}
+
+@media (max-width: 599px) {
+  .color-sample {
+    height: 100px;
+  }
 }

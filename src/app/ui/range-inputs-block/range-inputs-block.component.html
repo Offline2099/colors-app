@@ -1,6 +1,13 @@
 
 <!-- Header -->
-<div class="range-inputs-block-header">{{block.name}}</div>
+<div class="range-inputs-block-header">
+  <span>{{block.name}}</span>
+  <div 
+    class="range-inputs-block-toggler"
+    (click)="toggleBlock()">
+    <span class="range-inputs-block-toggler-triangle">&#9650;</span>
+  </div>
+</div>
 
 <!-- Output Color Sample (Optonal) -->
 <div 
