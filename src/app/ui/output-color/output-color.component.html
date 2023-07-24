@@ -13,9 +13,17 @@
   <div class="text-output">
     <div
       *ngFor="let row of textOutput"
-      class="text-output-row">
+      class="text-output-row"
+      [ngClass]="{'row-collapsed': row.collapsed}">
 
-      <div class="text-output-row-header">{{row.space}}</div>
+      <div class="text-output-row-header">
+        <span>{{row.space}}</span>
+        <div 
+          class="text-output-row-toggler"
+          (click)="toggleTextOutputBlock(row)">
+          <span class="text-output-row-toggler-triangle">&#9650;</span>
+        </div>
+      </div>
 
       <div class="text-output-row-body">
         <div 

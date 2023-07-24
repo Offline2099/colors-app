@@ -40,7 +40,6 @@
   display: flex;
   flex-basis: 45%;
   max-width: 420px;
-  min-height: 150px;
   border-radius: 10px;
   box-shadow: 0 0 2px 2px #222 inset;
 }
@@ -72,6 +71,7 @@
   .color-output {
     flex-basis: 100%;
     max-width: unset;
+    min-height: 150px;
   }
   .text-output {
     flex-basis: 100%;
@@ -89,6 +89,8 @@
   flex-basis: 100%;
   padding: 5px 0;
   border-bottom: 1px solid #444;
+  transition: .3s;
+  overflow: hidden;
 }
 
 .text-output-row:last-of-type {
@@ -96,11 +98,35 @@
 }
 
 .text-output-row-header {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 110px;
   letter-spacing: 0.02em;
+}
+
+.text-output-row-toggler {
+  position: absolute;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  top: 0;
+  right: 5px;
+  width: 24px;
+  height: 22px;
+  color: #888;
+  cursor: pointer;
+  user-select: none;
+}
+
+.text-output-row-toggler-triangle {
+  transform: rotateX(0deg);
+  transition: .3s;
+}
+
+.row-collapsed .text-output-row-toggler-triangle {
+  transform: rotateX(180deg);
 }
 
 .text-output-row-body {
@@ -169,6 +195,10 @@
   .text-output-row {
     flex-wrap: wrap;
     border-bottom: none;
+    max-height: 150px;
+  }
+  .text-output-row.row-collapsed {
+    max-height: 25px;
   }
   .text-output-row-header {
     flex-basis: 100%;
@@ -176,6 +206,10 @@
     margin-bottom: 5px;
     padding-bottom: 2px;
     border-bottom: 1px solid #444;
+  }
+  .text-output-row-toggler {
+    display: flex;
+    font-size: 14px;
   }
   .text-output-notation {
     padding-top: 3px;
@@ -198,6 +232,10 @@
   }
   .text-output-row-header {
     font-size: 14px;
+  }
+  .text-output-row-toggler {
+    height: 16px;
+    font-size: 12px;
   }
   .text-output-notation-name {
     min-width: 88px;

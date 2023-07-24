@@ -28,8 +28,13 @@ export class OutputColorComponent implements OnInit, DoCheck {
   constructTextOutputBlock(): void {
     this.textOutput = this.c.spaces().map(space => ({
       space: space.name,
-      notations: space.notations.map(notation => ({name: notation, values: []}))
+      notations: space.notations.map(notation => ({name: notation, values: []})),
+      collapsed: false
     }));
+  }
+
+  toggleTextOutputBlock(block: TextOutputBlock): void {
+    block.collapsed = !block.collapsed;
   }
 
   updateColor(): void {

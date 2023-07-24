@@ -60,6 +60,7 @@ export interface TextOutputBlock {
     name: string;
     values: string[];
   }[];
+  collapsed: boolean;
 }
 
 export interface InputIssue {
