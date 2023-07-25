@@ -90,3 +90,8 @@ export interface Converter {
   warningList: InputIssue[];
   color: Color;
 }
+
+export interface PageSection {
+  collapsed: boolean;
+  hovered: boolean;
+}
