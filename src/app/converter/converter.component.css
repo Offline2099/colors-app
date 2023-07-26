@@ -232,11 +232,13 @@ input[type=text]:focus {
 }
 
 .input-issues-container.input-errors {
-  background: rgba(48, 0, 0, .3);
+  background: rgba(120, 0, 0, .2);
+  box-shadow: 0 0 2px 2px rgba(120, 0, 0, .3) inset;
 }
 
 .input-issues-container.input-warnings {
   background: rgba(190, 190, 0, .1);
+  box-shadow: 0 0 2px 2px rgba(190, 190, 0, .1) inset;
 }
 
 .input-issue {
@@ -263,13 +265,13 @@ input[type=text]:focus {
 }
 
 .input-issues-container.input-errors .input-issue {
-  color: darkred;
   border-color: #881111;
+  color: #aa2222;
 }
 
 .input-issues-container.input-warnings .input-issue {
-  color: #787800;
   border-color: #5A5A00;
+  color: #787800;
 }
 
 .input-issue-symbol {
@@ -292,6 +294,7 @@ input[type=text]:focus {
   text-align: left;
   padding-top: 2px;
   font-size: 17px;
+  text-shadow: .5px .5px #222;
 }
 
 .input-issue-details {
@@ -303,7 +306,7 @@ input[type=text]:focus {
   margin-bottom: 5px;
   padding: 5px 10px;
   border-radius: 4px;
-  background: #222;
+  background: #282828;
   color: #777;
   font-family: 'Inconsolata', monospace;
   font-weight: 500;
@@ -311,7 +314,7 @@ input[type=text]:focus {
 }
 
 .input-issues-container.input-errors .fragment-invalid {
-  color: #CC3333;
+  color: #cc3333;
   background: rgba(255, 0, 0, .1);
 }
 

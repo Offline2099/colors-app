@@ -9,13 +9,13 @@
   background: linear-gradient(#181818, #141414);
   box-shadow: 0 0 2px 2px #1c1c1c inset;
   overflow: hidden;
-  transition: .4s;
+  transition: 400ms;
 }
 
 @media (max-width: 899px) {
   :host  {
     padding-top: 5px;
-    max-height: 350px;
+    max-height: 380px;
   }
   :host.sample-displayed {
     max-height: 500px;
@@ -105,21 +105,32 @@
 /*   Output Color Sample   */
 
 .color-sample {
-  display: flex;
+  display: none;
   flex-basis: 100%;
   height: 200px;
   border-radius: 6px;
   box-shadow: 0 0 2px 2px #222 inset;
 }
 
+:host.sample-displayed .color-sample {
+  display: flex;
+}
+
 @media (max-width: 899px) {
   .color-sample {
+    display: flex;
+    height: 50px;
+  }
+  :host.sample-displayed .color-sample {
     height: 150px;
   }
 }
 
 @media (max-width: 599px) {
   .color-sample {
+    height: 35px;
+  }
+  :host.sample-displayed .color-sample {
     height: 100px;
   }
 }

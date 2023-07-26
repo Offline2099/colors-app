@@ -130,11 +130,11 @@
 }
 
 :host.range-percentage .input-value {
-  width: 3.6em;
+  width: 3.7em;
 }
 
 :host.range-degree .input-value {
-  width: 3.2em;
+  width: 3.3em;
 }
 
 .value-min,

@@ -89,7 +89,7 @@
   flex-basis: 100%;
   padding: 5px 0;
   border-bottom: 1px solid #444;
-  transition: .3s;
+  transition: 300ms;
   overflow: hidden;
 }
 
@@ -217,7 +217,10 @@
   }
   .text-output-notation-name {
     min-width: 110px;
-    margin-bottom: 3px;
+    margin-bottom: 5px;
+    font-size: 14px;
+  }
+  .text-output-notation-values {
     font-size: 14px;
   }
   .text-output-value,
@@ -243,6 +246,7 @@
   }
   .text-output-notation-values {
     padding: 0 0 0 5px;
+    font-size: 12px;
   }
   .text-output-value,
   .text-output-value-percent {

@@ -238,25 +238,25 @@ strong {
 /*   Text Colors   */
 
 .red {
-  color: lightcoral;
+  color: #ff3333;
 }
 
 .green {
-  color: lightgreen;
+  color: #00aa00;
 }
 
 .blue {
-  color: deepskyblue;
+  color: #4499ff;
 }
 
 .cyan {
-  color: turquoise;
+  color: #00cccc;
 }
 
 .magenta {
-  color: violet;
+  color: #ee77ee;
 }
 
 .yellow {
-  color: goldenrod;
+  color: #bbbb00;
 }
