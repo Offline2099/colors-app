@@ -1,27 +1,26 @@
-# Colors
+# Color Converter
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.1.0.
+## Project Description
 
-## Development server
+An easy-to-use color converter. Can also be thought of as a demonstration for explaining color spaces (RGB, HSL, and CMYK). Includes multiple input notations for each color space. Can be used as a color picker.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+* Allows multiple ways to input the color: with sliders for any of the three color spaces, or as text in multiple notations (such as arithmetic, percentages, hexadecimal).
+    
+* Automatically outputs the color converted to all three color spaces (RGB, HSL, CMYK) in all the most commonly used notations.
+    
+* Provides an interactive visual demonstration of how changing a color in one format affects the representation of that color in other formats.
+    
+* Includes complex step-by-step validation for text input (which uses regular expressions). Shows exactly what is wrong in case of an error. Provides warnings for valid but odd input.
+    
+* Contains a separate tab with a brief summary of how the human eye recognizes and distinguishes colors, along with a simple explanation of how color spaces are constructed.
+    
+* Can possibly be upgraded to work with more rare and exotic color spaces or color notations.
 
-## Code scaffolding
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Technical Information
 
-## Build
+This project is made with Angular.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+* To run the app in the development mode, run `ng serve` in the project directory. Open [http://localhost:4200](http://localhost:4200) to view it in the browser. The page will reload if you make edits.
 
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+* To build the app in the production mode, run `ng build` in the project directory. The app will be saved to the `dist/` directory.
